@@ -1,6 +1,7 @@
 <?php
 error_reporting(0);
 require_once('config.php');
+require_once('assets/includes/blue-core.php');
 require_once('assets/includes/phpMailer_config.php');
 require_once('assets/import/sitemap-php/Sitemap.php');
 require_once('assets/import/DB/vendor/autoload.php');
