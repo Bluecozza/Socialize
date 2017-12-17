@@ -86,11 +86,11 @@
 				if (data.status == 200) {
 					$("[data-ad-status='"+ad_id+"']").find('span').text(data.ad);
 					if (ad_status == 0) {
-						self.html('<i class="fa fa-times-circle-o"></i>');
+						self.html('<i class="fa fa-check-square-o"></i>');
 						self.attr('data-status',1);
 					}
 					else{
-						self.html('<i class="fa fa-check-circle-o"></i>');
+						self.html('<i class="fa fa-square-o"></i>');
 						self.attr('data-status',0);
 					}
 				}

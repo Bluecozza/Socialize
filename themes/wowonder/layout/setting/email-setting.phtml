@@ -112,6 +112,16 @@
                <input type="checkbox" name="e_profile_wall_post" value="1" <?php echo $selected_e_profile_wall_post; ?>> <?php echo $wo['lang']['e_profile_wall_post']; ?> 
             </div>
          </div>
+         <!-- Multiple Radios (inline) -->
+         <div class="form-group">
+            <?php 
+            $selected_e_sentme_msg = ($wo['setting']['e_sentme_msg'] == 1)   ? ' checked' : '';
+            ?>
+            <div class="col-md-12">
+               <input type="checkbox" name="e_sentme_msg" value="1" <?php echo $selected_e_sentme_msg; ?>>
+               <?php echo $wo['lang']['e_sent_msg']; ?>
+            </div>
+         </div>
          
          <div class="form-group last-btn">
             <div class="col-sm-3">

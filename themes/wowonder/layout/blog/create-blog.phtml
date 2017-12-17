@@ -1,7 +1,9 @@
 <div class="page-margin">
    <div class="row">
-      <div class="col-md-2"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
-      <div class="col-md-10 profile-lists">
+      <div class="col-md-2">
+        <?php echo Wo_LoadPage("sidebar/left-sidebar"); ?>
+      </div>
+      <div class="col-md-7 profile-lists">
         <div class="list-group">
           <div class="list-group-item">
             <i class="fa fa-plus" aria-hidden="true"></i>
@@ -9,74 +11,122 @@
             <span class="pull-right"><a href="<?php echo Wo_SeoLink('index.php?link1=my-blogs') ?>" data-ajax="?link1=my-blogs"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> <?php echo $wo['lang']['my_articles'] ?></a></span>
           </div>
           <div class="setting-well-p">
-            <form  class="form form-horizontal" method="post" id="insert-blog" action="#">
-              <div class="setting-general-alert setting-update-alert" id="blog-alert"></div>
+            <form  class="form form-horizontal create-article-form" method="post" id="insert-blog" action="#">
+              <div class="create-article-alerts" id="blog-alert">
+                
+              </div>
+              
               <div class="form-group">
-                <label class="col-md-2" for="new-blog-title"><?php echo $wo['lang']['title'] ?></label>  
-                <div class="col-md-10">
-                   <input id="blog_title" name="blog_title" id="new-blog-title" type="text" class="form-control input-md"> 
+                <div class="col-md-12">
+                  <input id="blog_title" name="blog_title" id="new-blog-title" type="text" class="form-control input-md" placeholder="<?php echo $wo['lang']['title'] ?>"> 
                 </div>
-             </div>
-
-             <div class="form-group">
-                <label class="col-md-2" for="new-blog-desc"><?php echo $wo['lang']['description'] ?></label>  
-                <div class="col-md-10">
-                   <input name="blog_description" id="new-blog-desc" type="text" class="form-control input-md">
-                </div>
-             </div>
-             <div class="form-group">
-                <label class="col-md-2" for="new-blog-desc"><?php echo $wo['lang']['content'] ?>:</label>  
-                <div class="col-md-10">
-                   <textarea name="blog_content" id="blog"></textarea> 
-                </div>
-             </div>
-             <div class="form-group th-alert">
-                <label class="col-md-2" for="new-blog-desc" title="Upload"  class="pointer"><?php echo $wo['lang']['thumbnail'] ?></label>  
-                <div class="col-md-10 main prv-img pointer" id="select-img">
-                   <p><i class="fa fa-camera fa-wh" aria-hidden="true"></i> <?php echo $wo['lang']['select'] ?></p>
-                </div>
-             </div>
+              </div>
 
               <div class="form-group">
-                  <label class="col-md-2" for="blog_category"><?php echo $wo['lang']['category'];?></label>  
-                  <div class="col-md-10">
-                     <select name="blog_category" id="blog_category" class="form-control">
-                        <?php foreach ($wo['page_categories'] as $category_id => $category_name) {?>
-                        <option value="<?php echo $category_id?>"><?php echo $category_name; ?></option>
-                        <?php } ?>
+                <div class="col-md-12">
+                  <textarea name="blog_description" id="new-blog-desc" type="text" class="form-control input-md" placeholder="<?php echo $wo['lang']['description'] ?>"></textarea>
+                </div>
+              </div>
+              
+              <div class="form-group th-alert">
+                <div class="col-md-12">
+                  <div class="main prv-img pointer" id="select-img" data-block="thumdrop-zone">
+                    <div class="thumbnail-rendderer">
+                      <div>
+                        <h3><?php echo $wo['lang']['drop_img_here']; ?></h3>
+                        <div class="error-text-renderer">
+                          
+                        </div>
+                        <div>
+                          <span><?php echo $wo['lang']['or']; ?></span>
+                          <p>
+                            <?php echo $wo['lang']['browse_to_upload']; ?>
+                          </p>
+                        </div>
+                        
+                      </div> 
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-12">
+                   <textarea name="blog_content" id="blog" placeholder="<?php echo $wo['lang']['content'] ?>"></textarea> 
+                </div>
+              </div>
+
+              <div class="form-group">
+                  <div class="col-md-12">
+                     <select name="blog_category" class="form-control">
+                        <option value="0">
+                          <?php echo $wo['lang']['category'];?>
+                        </option>
+                        <?php foreach ($wo['page_categories'] as $category_id => $category_name): ?>
+                          <option value="<?php echo $category_id?>">
+                            <?php echo $category_name; ?>
+                          </option>
+                        <?php endforeach; ?>
                      </select>
                   </div>
-               </div>
+              </div>
 
-               <div class="form-group">
-                <label class="col-md-2" for="new-blog-desc"><?php echo $wo['lang']['tags']; ?></label>  
-                <div class="col-md-10">
-                   <input data-role="tagsinput" id="blog_tags" name="blog_tags" type="text" class="form-control input-md"> 
+              <div class="form-group">
+                <div class="col-md-12">
+                   <input data-role="tagsinput" id="blog_tags" name="blog_tags" type="text" class="form-control input-md" placeholder="<?php echo $wo['lang']['tags']; ?>"> 
                 </div>
-             </div>
-               <input type="file" class="hidden" id="thumbnail" name="thumbnail">
-
-                <div class="form-group last-btn">
-                  <label class="col-md-2"></label>
-                  <div class="col-sm-10">
-                     <button type="submit" class="btn btn-main">
-                     <i class="fa fa-upload progress-icon" data-icon="upload"></i> <?php echo $wo['lang']['publish']; ?>
-                     </button>
-                  </div>
-               </div>
+              </div>
+              <input type="file" class="hidden" id="thumbnail" name="thumbnail" accept="image/*">
+              <div class="form-group last-btn">
+                <div class="col-sm-12">
+                  <button type="submit" class="btn btn-main">
+                    <i class="fa fa-upload progress-icon" data-icon="upload"></i> <?php echo $wo['lang']['publish']; ?>
+                  </button>
+                  <button type="reset" class="btn btn-default">
+                    <i class="fa fa-ban"></i> <?php echo $wo['lang']['cancel']; ?>
+                  </button>
+                </div>
+              </div>
                <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
-               <input name="image" type="file" id="upload" class="hidden" onchange="">
+               <input name="image" type="file" id="upload" class="hidden">
             </form>
           </div>
         </div>
       </div>
+      <?php echo Wo_LoadPage("sidebar/content"); ?>
    </div>
    <!-- .row -->
 </div>
+
 <script src="<?php echo $wo['config']['theme_url'];?>/javascript/bootstrap-tagsinput-latest/src/bootstrap-tagsinput.js"></script>
 <script>
 
 jQuery(document).ready(function($) {
+
+    var thumb_drop_block = $("[data-block='thumdrop-zone']");
+
+    if (typeof(window.FileReader) == 'undefined') {
+      thumb_drop_block.find('.thumbnail-rendderer div').text('Drag drop is not supported in your browser!');
+    }
+
+    else{
+      thumb_drop_block[0].ondragover = function() {
+          thumb_drop_block.addClass('hover');
+          return false;
+      };
+          
+      thumb_drop_block[0].ondragleave = function() {
+          thumb_drop_block.removeClass('hover');
+          return false;
+      };
+
+      thumb_drop_block[0].ondrop = function(event) {
+          event.preventDefault();
+          thumb_drop_block.removeClass('hover');
+          var file = event.dataTransfer.files;
+          $("#thumbnail").prop('files', file);
+      };
+    }
 
     $("#blog_tags").tagsinput({
       maxTags: 15,

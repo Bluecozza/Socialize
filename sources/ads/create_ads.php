@@ -4,10 +4,11 @@ if ($wo['loggedin'] == false || $wo['config']['user_ads'] == 0) {
   exit();
 
 }
-$wo['countries_name'][0] = $wo['lang']['select'].' '.$wo['lang']['all'];
+
 $wo['description'] = $wo['config']['siteDesc'];
 $wo['keywords']    = $wo['config']['siteKeywords'];
 $wo['page']        = 'ads';
+$wo['ap']          = 'create';
 $wo['title']       = 'Create ads';
 $wo['my-pages']    = Wo_GetMyPages();
 $wo['audience']    = $wo['countries_name'];

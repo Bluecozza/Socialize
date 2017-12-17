@@ -13,22 +13,22 @@
 		<div class="film-player-wrapper">
       <?php if (!empty($wo['movie']['source'])): ?>
 			<div class="video-js-responsive-container vjs-hd">
-			<video onplay="" class="video-js vjs-big-play-centered" controls preload="auto" poster="" data-setup="{}">
+			<video class="video-js vjs-big-play-centered" controls preload="auto" style="width: 100%; height: 100%;">
 			    <source src="<?php echo $wo['movie']['source']; ?>" type='video/mp4'>
 			    <source src="<?php echo $wo['movie']['source']; ?>" type='video/webm'> 
 			</video>
 			</div>	
-			<script src="<?php echo $wo['config']['theme_url'];?>/player/Video/video.js"></script>
+
       <?php elseif(!empty($wo['movie']['iframe'])): ?>
         <iframe src="<?php echo $wo['movie']['iframe']; ?>" frameborder="0"></iframe>
       <?php else: ?>
         <div class="video-js-responsive-container vjs-hd">
-        <video onplay="" class="video-js vjs-big-play-centered" controls preload="auto" poster="" data-setup="{}">
+        <video style="width: 100%; height: 100%;" class="video-js vjs-big-play-centered" controls preload="auto">
             <source src="<?php echo $wo['movie']['video']; ?>" type='video/mp4'>
             <source src="<?php echo $wo['movie']['video']; ?>" type='video/webm'> 
         </video>
         </div>  
-        <script src="<?php echo $wo['config']['theme_url'];?>/player/Video/video.js"></script>
+        
       <?php endif; ?>
 		</div>
 		<div>
@@ -116,7 +116,7 @@
 					<div class="related-movies-wrapper">
 						<h4 class="related-movies"><?php echo $wo['lang']['more_like_this']; ?></h4>
 						<?php if (count($wo['related-films']) > 0): ?>
-							<div class="related-movies-carousel">
+							<div class="related-movies-carousel hidden">
 								<?php foreach ($wo['related-films']as $wo['filmInfo']): ?>
 									<?php echo Wo_LoadPage('movies/includes/related-list'); ?>
 								<?php endforeach; ?>
@@ -127,18 +127,18 @@
 
 					</div>
 					<div class="clear"></div>
-					
 				</div>
 				<div class="col-md-8 col-xs-12 col-sm-12">
 					<div class="movies-com-wrapper">
 		              <div class="movies-com-top">
-		                <h4 class="pull-left"><span><?php echo Wo_GetMovieCommentsCount($wo['movie']['id']); ?></span> <?php echo $wo['lang']['comments']; ?></h4>
+		                <h4 class="pull-left">
+                      <?php echo $wo['lang']['comments']; ?>
+                      <span>
+                        <?php echo Wo_GetMovieCommentsCount($wo['movie']['id']); ?>
+                      </span> 
+                    </h4>
 		              </div>
-		              <div class="col-md-1 col-sm-1 col-xs-1 movies-com-head pull-left">
-		                <img src="<?php echo $wo['user']['avatar']; ?>" alt="Picture" width='50'>
-		                <div class="clear"></div>
-		              </div>
-		              <div class="movies-com-box col-md-11 col-sm-11 col-xs-11">
+		              <div class="movies-com-box">
 		                <form  class="form">
 		                  <div class="w100">
 		                    <textarea  id="movies-comment" name="text" class="form-control" placeholder="Wrire a comment"></textarea>
@@ -169,18 +169,28 @@
                       <i class="fa fa-arrow-down progress-icon" data-icon="arrow-down"></i> <?php echo $wo['lang']['load_more'] ?></button>
                     </div>
                  <?php endif; ?>
-		            </div>
+		      </div>
 				</div>
 				
 			</div>
 			<div class="clear"></div>
 		</div>
-
 	</div>
 </div>
+
+
 <div id="fb-root"></div>
 <script>
 jQuery(document).ready(function($) {
+  $('video').mediaelementplayer({
+    pluginPath: 'https://cdnjs.com/libraries/mediaelement-plugins/',
+    shimScriptAccess: 'always',
+    autoplay: true,
+    features: ['playpause', 'fullscreen', 'current', 'progress', 'duration', 'speed', 'skipback', 'jumpforward', 'tracks', 'markers', 'volume', 'chromecast', 'contextmenu', 'flash'],
+    success: function (media) {
+        media.addEventListener('ended', function (e) { /* pass */}, false); 
+    },
+  });
 
   $(".load-more-movie-comments").click(function(event) {
     var self    = $(this);
@@ -211,7 +221,7 @@ jQuery(document).ready(function($) {
   });
 
 
-  $(".related-movies-carousel").owlCarousel({
+  $(".related-movies-carousel").removeClass('hidden').owlCarousel({
 		loop:false,
 		margin:15,
 		responsive:{

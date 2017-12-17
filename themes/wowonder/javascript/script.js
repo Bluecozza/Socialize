@@ -8,6 +8,15 @@ document_title = document.title;
 
 
 $(function () {
+  
+  $(window).on("dragover",function(e){
+    e.preventDefault();
+  },false);
+
+  $(window).on("drop",function(e){
+    e.preventDefault();
+  },false);
+
   $('.postText').autogrow({vertical: true, horizontal: false, height: 200});
   $('#movies-comment').autogrow({vertical: true, horizontal: false, height: 200});
   $('#blog-comment').autogrow({vertical: true, horizontal: false, height: 200});
@@ -555,10 +564,12 @@ function Wo_GetMorePosts() {
   if ($('.post').length > 0) {
     posts_count = $('.post').length;
   }
+  
   if ($(".user-ad-container").length > 0) {
     ad_id = $(".user-ad-container").last().attr('id');
   }
-   if ($(".user-story-container").length > 0) {
+
+  if ($(".user-story-container").length > 0) {
     story_id = $(".user-story-container").last().attr('id');
   }
   $.get(Wo_Ajax_Requests_File(), {

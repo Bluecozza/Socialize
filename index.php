@@ -9,6 +9,9 @@
 // | Copyright (c) 2017 WoWonder. All rights reserved.
 // +------------------------------------------------------------------------+
 require_once('assets/init.php');
+
+
+
 if (empty($wo['config']['update_db_153'])) {
     exit('Please upload ./Update Guide/v1.5.3/update.php from the update zip file, and run it: ' . $site_url . '/update.php');
 }
@@ -362,6 +365,9 @@ switch ($page) {
         break;
     case 'wallet':
         include('sources/ads/wallet.php');
+        break;
+    case 'send_money':
+        include('sources/ads/send_money.php');
         break;
     case 'create-ads':
         include('sources/ads/create_ads.php');

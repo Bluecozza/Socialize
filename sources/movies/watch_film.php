@@ -9,7 +9,7 @@ if (count($source) > 0) {
 	$query = mysqli_query($sqlConnect, "UPDATE " . T_MOVIES . " SET views = views + 1 WHERE id = '$id'");
 	$wo['description']   = $source[0]['description'];
 	$wo['keywords']      = $wo['config']['siteKeywords'];
-	$wo['page']          = 'movies';
+	$wo['page']          = 'watch_movie';
 	$wo['movie']         = $source[0];
 	$wo['related-films'] = Wo_SearchFilms($wo['movie']['name']);
 	$wo['title']         = $source[0]['name'];

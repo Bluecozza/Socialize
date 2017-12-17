@@ -357,24 +357,32 @@ function Wo_IsOnwerUser($user_id) {
 }
 function Wo_IsOnwer($user_id) {
     global $wo;
+
     if ($wo['loggedin'] == false) {
         return false;
     }
+
     if (empty($user_id) || !is_numeric($user_id) || $user_id < 0) {
         return false;
     }
+
     $user_id        = Wo_Secure($user_id);
     $logged_user_id = Wo_Secure($wo['user']['user_id']);
+
     if (Wo_IsAdmin($logged_user_id) === false) {
         if ($user_id == $logged_user_id) {
             return true;
-        } else {
+        } 
+        else {
             return false;
         }
-    } else {
+    } 
+
+    else {
         return true;
     }
 }
+
 function Wo_UserData($user_id) {
     global $wo, $sqlConnect, $cache;
     if (empty($user_id) || !is_numeric($user_id) || $user_id < 0) {
@@ -425,6 +433,7 @@ function Wo_UserData($user_id) {
     $fetched_data['working_link'] = (strpos($fetched_data['working_link'], 'http') === false && !empty($fetched_data['working_link'])) ? 'http://' . $fetched_data['working_link'] : $fetched_data['working_link'];
     return $fetched_data;
 }
+
 function Wo_UserStatus($user_id, $lastseen, $type = '') {
     global $wo;
     if ($wo['loggedin'] == false) {
@@ -439,21 +448,28 @@ function Wo_UserStatus($user_id, $lastseen, $type = '') {
     if (empty($lastseen) || !is_numeric($lastseen) || $lastseen < 0) {
         return false;
     }
+
     $status   = '';
     $user_id  = Wo_Secure($user_id);
     $lastseen = Wo_Secure($lastseen);
     $time     = time() - 60;
+
     if ($lastseen < $time) {
         if ($type == 'profile') {
             $status = '<span class="small-last-seen">' . $wo['lang']['last_seen'] . ' <span style="font-size:12px; color:#777;"> ' . Wo_Time_Elapsed_String($lastseen) . '</span></span>';
-        } else {
+        } 
+        else {
             $status = '<span class="small-last-seen">' . $wo['lang']['last_seen'] . ' ' . Wo_Time_Elapsed_String($lastseen) . '</span>';
         }
-    } else {
+    } 
+
+    else {
         $status = '<span class="online-text"> ' . $wo['lang']['online'] . ' </span>';
     }
+
     return $status;
 }
+
 function Wo_LastSeen($user_id, $type = '') {
     global $wo, $sqlConnect, $cache;
     if ($wo['loggedin'] == false) {
@@ -483,6 +499,7 @@ function Wo_LastSeen($user_id, $type = '') {
         return false;
     }
 }
+
 function Wo_RegisterUser($registration_data, $invited = false) {
     global $wo, $sqlConnect;
     if (empty($registration_data)) {
@@ -1390,18 +1407,23 @@ function Wo_DeleteFollow($following_id = 0, $follower_id = 0) {
         }
     }
 }
-function Wo_CountFollowing($user_id) {
+function Wo_CountFollowing($user_id,$active = true) {
     global $wo, $sqlConnect;
     $data = array();
     if (empty($user_id) or !is_numeric($user_id) or $user_id < 1) {
         return false;
     }
     $user_id    = Wo_Secure($user_id);
-    $query_text = "SELECT COUNT(`user_id`) AS count FROM " . T_USERS . " WHERE `user_id` IN (SELECT `following_id` FROM " . T_FOLLOWERS . " WHERE `follower_id` = {$user_id} AND `following_id` <> {$user_id} AND `active` = '1') AND `active` = '1'";
+    $sub_sql    = '';
+    if ($active === true) {
+        $sub_sql = "AND `active` = '1'";
+    }
+    $query_text = "SELECT COUNT(`user_id`) AS count FROM " . T_USERS . " WHERE `user_id` IN (SELECT `following_id` FROM " . T_FOLLOWERS . " WHERE `follower_id` = {$user_id} AND `following_id` <> {$user_id} {$sub_sql}) {$sub_sql}";
     if ($wo['loggedin'] == true) {
         $logged_user_id = Wo_Secure($wo['user']['user_id']);
         $query_text .= " AND `user_id` NOT IN (SELECT `blocked` FROM " . T_BLOCKS . " WHERE `blocker` = '{$logged_user_id}') AND `user_id` NOT IN (SELECT `blocker` FROM " . T_BLOCKS . " WHERE `blocked` = '{$logged_user_id}')";
     }
+
     $query        = mysqli_query($sqlConnect, $query_text);
     $fetched_data = mysqli_fetch_assoc($query);
     return $fetched_data['count'];
@@ -1646,6 +1668,7 @@ function Wo_GetFollowButton($user_id = 0) {
         }
     }
 }
+
 function Wo_RegisterNotification($data = array()) {
     global $wo, $sqlConnect;
     if (empty($data['session_id'])) {
@@ -1673,7 +1696,8 @@ function Wo_RegisterNotification($data = array()) {
     }
     if ($data['notifier_id'] == $wo['user']['user_id']) {
         $notifier = $wo['user'];
-    } else {
+    } 
+    else {
         $data['notifier_id'] = Wo_Secure($data['notifier_id']);
         $notifier            = Wo_UserData($data['notifier_id']);
         if (!isset($notifier['user_id'])) {
@@ -1767,6 +1791,7 @@ function Wo_RegisterNotification($data = array()) {
     if (!isset($data['undo']) or $data['undo'] != true) {
         $query_three     = "INSERT INTO " . T_NOTIFICATION . " (`recipient_id`, `notifier_id`, {$page_notifcation_query} {$group_notifcation_query} {$event_notifcation_query} {$thread_notifcation_query} `post_id`, `type`, `type2`, `text`, `url`, `time`) VALUES (" . $recipient['user_id'] . "," . $notifier['user_id'] . ",{$page_notifcation_query2} {$group_notifcation_query2} {$event_notifcation_query2} {$thread_notifcation_query2} " . $data['post_id'] . ",'" . $data['type'] . "','" . $data['type2'] . "','" . $data['text'] . "','{$url}'," . time() . ")";
         $sql_query_three = mysqli_query($sqlConnect, $query_three);
+        
         if ($sql_query_three) {
             if ($wo['config']['emailNotification'] == 1 && $recipient['emailNotification'] == 1) {
                 $send_mail = false;
@@ -2980,12 +3005,18 @@ function Wo_ShareFile($data = array(), $type = 0) {
     }
 }
 function Wo_DisplaySharedFile($media, $placement = '') {
-    global $wo, $sqlConnect;
-    $wo['media']['filename'] = Wo_GetMedia($media['filename']);
-    $wo['media']['name']     = Wo_Secure($media['name']);
-    $wo['media']['type']     = $media['type'];
-    $wo['media']['storyId']  = @$media['storyId'];
-    $icon_size               = 'fa-2x';
+    global $wo, $sqlConnect, $db;
+    $wo['media']['filename']    = Wo_GetMedia($media['filename']);
+    $wo['media']['video_thumb'] = ((!empty($media['postFileThumb'])) ? Wo_GetMedia($media['postFileThumb']) : '');
+    $wo['media']['name']        = Wo_Secure($media['name']);
+    $wo['media']['type']        = $media['type'];
+    $wo['media']['storyId']     = @$media['storyId'];
+    $wo['is_video_ad']          = '';
+    $wo['wo_ad_media']          =    '';
+    $wo['wo_ad_url']            = '';
+    $wo['wo_ad_id']             = 0;
+    $wo['rvad_con']             = '';
+    $icon_size                  = 'fa-2x';
     if ($placement == 'chat') {
         $icon_size = '';
     }
@@ -3036,8 +3067,40 @@ function Wo_DisplaySharedFile($media, $placement = '') {
         if ($file_extension == 'mp4' || $file_extension == 'mkv' || $file_extension == 'avi' || $file_extension == 'webm' || $file_extension == 'mov') {
             if ($placement == 'message' || $placement == 'chat') {
                 $media_file .= Wo_LoadPage('players/chat-video');
-            } else {
-                $media_file .= Wo_LoadPage('players/video');
+            } 
+            else {
+                $t_users    = T_USERS;
+                $lats_ad_id = (!empty($_GET['ad_id']) && is_numeric($_GET['ad_id'])) ? $_GET['ad_id'] : false;
+                $con_list   = implode(',', $wo['ad-con']['ads']);
+
+                if ($con_list) {
+                    $db->where(" `id` NOT IN ({$con_list}) ");
+                }
+
+                $db->where(" `user_id` IN (SELECT `user_id` FROM `$t_users` WHERE `wallet` > 0) ");
+                $db->where("`status`", 1);
+                $db->where("`appears`", 'video');
+
+                if (!empty($lats_ad_id)) {
+                    $db->where("id", $lats_ad_id,"<>");
+                }
+
+                if ($wo['loggedin'] && !empty($wo['user']['country_id'])) {
+                    $usr_country = $wo['user']['country_id'];
+                    $db->where(" `audience` LIKE '%$usr_country%' ");
+                }
+
+
+                $video_ad = $db->orderBy('RAND()')->getOne(T_USER_ADS);
+                if (!empty($video_ad)) {
+                    $wo['is_video_ad'] = ",'ads'";
+                    $wo['wo_ad_url']   = $video_ad->url;
+                    $wo['wo_ad_media'] = $video_ad->ad_media;
+                    $wo['wo_ad_id']    = $video_ad->id;
+                    $wo['rvad_con']    = "rvad-".$video_ad->bidding;
+                }
+
+                $media_file       .= Wo_LoadPage('players/video');
             }
         }
         $last_file_view = '';
@@ -3114,6 +3177,8 @@ function Wo_CheckIfUserCanRegister($num = 10) {
 function Wo_RegisterPost($re_data = array('recipient_id' => 0)) {
     global $wo, $sqlConnect;
     $is_there_video = false;
+    $playtube_root  = preg_quote($wo['config']['playtube_url']);
+    
     if (empty($re_data['user_id']) or $re_data['user_id'] == 0) {
         $re_data['user_id'] = $wo['user']['user_id'];
     }
@@ -3152,9 +3217,15 @@ function Wo_RegisterPost($re_data = array('recipient_id' => 0)) {
         $re_data['postVimeo']       = '';
         $re_data['postDailymotion'] = '';
         $re_data['postFacebook']    = '';
+        $re_data['postFacebook']    = '';
+        $re_data['postPlaytube']    = '';
         if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $re_data['postText'], $match)) {
             $re_data['postYoutube'] = Wo_Secure($match[1]);
             $is_there_video         = true;
+        }
+        if (Wo_IsUrl($wo['config']['playtube_url']) && preg_match('#'.$playtube_root.'\/(?:watch|embed)\/(.{10,})#i', $re_data['postText'], $match)) {
+            $re_data['postPlaytube'] = ((!empty($match[1])) ? Wo_Secure($match[1]) : '');
+            $is_there_video          = true;
         }
         if (preg_match("#(?<=vine.co/v/)[0-9A-Za-z]+#", $re_data['postText'], $match)) {
             $re_data['postVine'] = Wo_Secure($match[0]);
@@ -3192,6 +3263,7 @@ function Wo_RegisterPost($re_data = array('recipient_id' => 0)) {
             }
             $is_there_video = true;
         }
+
         $link_regex = '/(http\:\/\/|https\:\/\/|www\.)([^\ ]+)/i';
         $i          = 0;
         preg_match_all($link_regex, $re_data['postText'], $matches);
@@ -3243,19 +3315,28 @@ function Wo_RegisterPost($re_data = array('recipient_id' => 0)) {
         $re_data['postLinkContent'] = '';
         $re_data['postLink']        = '';
     }
-    if (!empty($re_data['postVine'])) {
+    if (!empty($re_data['postPlaytube'])) {
         $re_data['postYoutube']     = '';
         $re_data['postVimeo']       = '';
         $re_data['postDailymotion'] = '';
         $re_data['postFacebook']    = '';
         $re_data['postSoundCloud']  = '';
     }
-    if (!empty($re_data['postYoutube'])) {
+    if (!empty($re_data['postVine'])) {
+        $re_data['postYoutube']     = '';
+        $re_data['postVimeo']       = '';
+        $re_data['postDailymotion'] = '';
+        $re_data['postFacebook']    = '';
+        $re_data['postSoundCloud']  = '';
+        $re_data['postPlaytube']    = '';
+    }
+    else if (!empty($re_data['postYoutube'])) {
         $re_data['postVine']        = '';
         $re_data['postVimeo']       = '';
         $re_data['postDailymotion'] = '';
         $re_data['postFacebook']    = '';
         $re_data['postSoundCloud']  = '';
+        $re_data['postPlaytube']    = '';
     }
     if (!empty($re_data['postVimeo'])) {
         $re_data['postVine']        = '';
@@ -3263,6 +3344,7 @@ function Wo_RegisterPost($re_data = array('recipient_id' => 0)) {
         $re_data['postDailymotion'] = '';
         $re_data['postFacebook']    = '';
         $re_data['postSoundCloud']  = '';
+        $re_data['postPlaytube']    = '';
     }
     if (!empty($re_data['postDailymotion'])) {
         $re_data['postYoutube']    = '';
@@ -3270,6 +3352,7 @@ function Wo_RegisterPost($re_data = array('recipient_id' => 0)) {
         $re_data['postVine']       = '';
         $re_data['postFacebook']   = '';
         $re_data['postSoundCloud'] = '';
+        $re_data['postPlaytube']   = '';
     }
     if (!empty($re_data['postFacebook'])) {
         $re_data['postYoutube']     = '';
@@ -3277,6 +3360,7 @@ function Wo_RegisterPost($re_data = array('recipient_id' => 0)) {
         $re_data['postDailymotion'] = '';
         $re_data['postVine']        = '';
         $re_data['postSoundCloud']  = '';
+        $re_data['postPlaytube']    = '';
     }
     if (!empty($re_data['postSoundCloud'])) {
         $re_data['postYoutube']     = '';
@@ -3284,6 +3368,7 @@ function Wo_RegisterPost($re_data = array('recipient_id' => 0)) {
         $re_data['postDailymotion'] = '';
         $re_data['postFacebook']    = '';
         $re_data['postVine']        = '';
+        $re_data['postPlaytube']    = '';
     }
     if (empty($re_data['multi_image'])) {
         $re_data['multi_image'] = 0;
@@ -3617,6 +3702,9 @@ function Wo_PostData($post_id, $placement = '', $limited = '') {
     if (!empty($story['postFile'])) {
         $story['postFile_full'] = Wo_GetMedia($story['postFile']);
     }
+    if (!empty($story['postPhoto'])) {
+        $story['postPhoto'] = Wo_GetMedia($story['postPhoto']);
+    }
     if (!empty($story['blog_id'])) {
         $story['blog'] = Wo_GetArticle($story['blog_id']);
     }
@@ -3873,6 +3961,7 @@ function Wo_GetPosts($data = array('filter_by' => 'all', 'after_post_id' => 0, '
                 break;
         }
     }
+
     $user = ($wo['loggedin']) ? $wo['user']['id'] : 0;
     if ((!isset($data['publisher_id']) || $data['publisher_id'] == $user) && empty($Wo_page_publisher['page_id'])) {
         $query_text .= " AND `shared_from` <>  {$user}";
@@ -3885,6 +3974,7 @@ function Wo_GetPosts($data = array('filter_by' => 'all', 'after_post_id' => 0, '
     }
     $limit   = Wo_Secure($data['limit']);
     $last_ad = 0;
+
     if (!empty($data['ad-id'])) {
         $last_ad = $data['ad-id'];
     }
@@ -3896,12 +3986,14 @@ function Wo_GetPosts($data = array('filter_by' => 'all', 'after_post_id' => 0, '
     }
     $data = array();
     $sql  = mysqli_query($sqlConnect, $query_text);
+
     while ($fetched_data = mysqli_fetch_assoc($sql)) {
         $post = Wo_PostData($fetched_data['id']);
         if (is_array($post)) {
             $data[] = $post;
         }
     }
+
     if (is_numeric($last_ad) && count($data) > 1) {
         $ad = Wo_GetPostAds(Wo_Secure($last_ad));
         if (is_array($ad) && !empty($ad)) {
@@ -3911,8 +4003,11 @@ function Wo_GetPosts($data = array('filter_by' => 'all', 'after_post_id' => 0, '
             $data[] = $ad;
         }
     }
+
     return $data;
 }
+
+
 function Wo_DeletePost($post_id = 0) {
     global $wo, $sqlConnect, $cache;
     if ($post_id < 1 || empty($post_id) || !is_numeric($post_id)) {
@@ -3937,6 +4032,14 @@ function Wo_DeletePost($post_id = 0) {
                 @unlink(trim($fetched_data['postFile']));
                 $delete_from_s3 = Wo_DeleteFromToS3($fetched_data['postFile']);
             }
+        }
+        if (!empty($fetched_data['postFileThumb'])) {
+            if (file_exists($fetched_data['postFileThumb'])) {
+                @unlink(trim($fetched_data['postFileThumb']));
+            }
+            else if($wo['config']['amazone_s3'] == 1){
+                @Wo_DeleteFromToS3($fetched_data['postFileThumb']);
+            }   
         }
         if (isset($fetched_data['postLinkImage']) && !empty($fetched_data['postLinkImage']) && !$is_post_shared) {
             @unlink($fetched_data['postLinkImage']);
@@ -5101,8 +5204,6 @@ function Wo_UpdatePost($data = array()) {
                 } else {
                     $post_text = str_replace($match_search, $match_replace, $post_text);
                 }
-                //$post_text      = preg_replace("/$match_search\b/i", $match_replace,  $post_text);
-                //$post_text         = str_replace($match_search, $match_replace, $post_text);
                 $hashtag_query     = "UPDATE " . T_HASHTAGS . " SET `last_trend_time` = " . time() . ", `trend_use_num` = " . ($hashdata['trend_use_num'] + 1) . " WHERE `id` = " . $hashdata['id'];
                 $hashtag_sql_query = mysqli_query($sqlConnect, $hashtag_query);
             }
@@ -5198,4 +5299,41 @@ function Wo_UpdateChatColor($user_id = 0, $conversation_user_id = 0, $color = ''
     $sql_queryset = mysqli_query($sqlConnect, $query);
     return $sql_queryset;
 }
-?>
+
+
+function Wo_ProfileCompletion(){
+    global $sqlConnect, $wo;
+    if ($wo['loggedin'] == false) {
+        return false;
+    }
+
+    $data = array(
+        1 => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
+    );
+
+    if (!empty($wo['user']['startup_image'])) {
+        $data[1] = 20;
+    }
+
+    if (!empty($wo['user']['first_name']) && !empty($wo['user']['first_name'])) {
+        $data[2] = 20;
+    }
+
+    if (!empty($wo['user']['working'])) {
+        $data[3] = 20;
+    }
+
+    if (!empty($wo['user']['country_id'])) {
+        $data[4] = 20;
+    }
+
+    if (!empty($wo['user']['address'])) {
+        $data[5] = 20;
+    }
+    
+    return $data;
+}

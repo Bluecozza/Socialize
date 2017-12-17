@@ -2,7 +2,7 @@
   <div id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav ads-nav w100">
       <li class="pull-left">
-        <a href="<?php echo Wo_SeoLink('index.php?link1=ads'); ?>"><i class="fa fa-buysellads" aria-hidden="true"></i>
+        <a href="<?php echo Wo_SeoLink('index.php?link1=ads'); ?>" class="<?php echo ($wo['ap'] == 'ads') ? 'active' : ''; ?>"><i class="fa fa-buysellads" aria-hidden="true"></i>
           &nbsp;
           <span>
             <?php echo $wo['lang']['ads']; ?>
@@ -10,19 +10,29 @@
         </a>
       </li>
       <li class="pull-left">
-        <a href="<?php echo Wo_SeoLink('index.php?link1=wallet'); ?>">
+        <a href="<?php echo Wo_SeoLink('index.php?link1=wallet'); ?>" class="<?php echo ($wo['ap'] == 'wallet') ? 'active' : ''; ?>">
         <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
           &nbsp;
           <span>
-            <?php echo $wo['lang']['wallet']; ?> (<?php echo Wo_GetCurrency($wo['config']['ads_currency']) ?><?php echo $wo['user']['wallet'] ?>)
+            <?php echo $wo['lang']['wallet']; ?>
+          </span>
+        </a>
+      </li>
+      <li class="pull-left">
+        <a href="<?php echo Wo_SeoLink('index.php?link1=send_money'); ?>" class="<?php echo ($wo['ap'] == 'send') ? 'active' : ''; ?>">
+        <i class="fa fa-exchange" aria-hidden="true"></i>
+          &nbsp;
+          <span>
+            <?php echo $wo['lang']['send_money']; ?>
           </span>
         </a>
       </li>
 
       <li class="pull-right">
-        <a href="<?php echo Wo_SeoLink('index.php?link1=create-ads'); ?>"><i class="fa fa-plus-square-o" aria-hidden="true"></i> 
-        <?php echo $wo['lang']['create']; ?>
-        <?php echo $wo['lang']['new']; ?>
+        <a href="<?php echo Wo_SeoLink('index.php?link1=create-ads'); ?>" class="<?php echo ($wo['ap'] == 'create') ? 'active' : ''; ?>">
+          <i class="fa fa-plus-square-o" aria-hidden="true"></i>&nbsp; 
+          <?php echo $wo['lang']['create']; ?>
+          <?php echo $wo['lang']['new']; ?>
         </a>
       </li>
     </ul>
@@ -50,12 +60,15 @@
           <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
         </a>
       </li>
+      <li class="pull-left">
+        <a href="<?php echo Wo_SeoLink('index.php?link1=send_money'); ?>">
+        <i class="fa fa-exchange" aria-hidden="true"></i>
+        </a>
+      </li>
 
       <li class="pull-right">
       	<a href="<?php echo Wo_SeoLink('index.php?link1=create-ads'); ?>">
         <i class="fa fa-plus-square-o" aria-hidden="true"></i> 
-        <?php echo $wo['lang']['create']; ?>
-        <?php echo $wo['lang']['new']; ?>
         </a>
       </li>
     </ul>

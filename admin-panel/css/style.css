@@ -8046,3 +8046,35 @@ html.ie11 .dropdown-menu ul.menu li a {
 html.ie11 .bs-searchbox .form-control {
   width: 90%; }
 
+.wo-admincp-feturepager{
+  width: 100%;
+  overflow: hidden;
+}
+
+.wo-admincp-feturepager nav ul{
+  margin: 0px;
+}
+
+.wo-admincp-feturepager nav ul li{
+  overflow: hidden;
+}
+
+.wo-admincp-feturepager nav a{
+  height: 32px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  border-radius: 0;
+}
+
+.wo-admincp-feturepager .pull-left span{
+  display: inline-block;
+  line-height: 35px;
+}
+
+.pagination > li > a .material-icons, .pagination > li > a .material-icons {
+  position: relative;
+  bottom: 2px;
+  height: inherit;
+  margin: 0px;
+}

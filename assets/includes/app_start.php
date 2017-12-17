@@ -3,6 +3,7 @@ error_reporting(0);
 require_once('config.php');
 require_once('assets/includes/phpMailer_config.php');
 require_once('assets/import/sitemap-php/Sitemap.php');
+require_once('assets/import/DB/vendor/autoload.php');
 // require 'assets/import/ffmpeg-class/vendor/autoload.php';
 $wo           = array();
 // Connect to SQL Server
@@ -34,11 +35,14 @@ if (isset($ServerErrors) && !empty($ServerErrors)) {
     }
     die();
 }
+
 $baned_ips = Wo_GetBanned('user');
 if (in_array($_SERVER["REMOTE_ADDR"], $baned_ips)) {
     exit();
 }
+
 $config              = Wo_GetConfig();
+$db                  = new MysqliDb($sqlConnect);
 // Config Url
 $config['theme_url'] = $site_url . '/themes/' . $config['theme'];
 $config['site_url']  = $site_url;
@@ -51,14 +55,14 @@ if (!empty($config['bucket_name'])) {
 $config['s3_site_url'] = $s3_site_url;
 
 
-$wo['config']          = $config;
-$ccode               = Wo_CustomCode('g');
-$ccode               = (is_array($ccode))  ? $ccode    : array();
+$wo['config']              = $config;
+$ccode                     = Wo_CustomCode('g');
+$ccode                     = (is_array($ccode))  ? $ccode    : array();
 $wo['config']['header_cc'] = (!empty($ccode[0])) ? $ccode[0] : '';
 $wo['config']['footer_cc'] = (!empty($ccode[1])) ? $ccode[1] : '';
 $wo['config']['styles_cc'] = (!empty($ccode[2])) ? $ccode[2] : '';
 
-$wo['site_pages']      = array(
+$wo['site_pages'] = array(
     'home',
     'welcome',
     'activate',
@@ -101,7 +105,8 @@ $wo['site_pages']      = array(
     'developers',
     'ads'
 );
-$wo['script_version']  = '1.5.3.2';
+
+$wo['script_version']  = '1.5.4';
 $http_header           = 'http://';
 if (!empty($_SERVER['HTTPS'])) {
     $http_header = 'https://';
@@ -252,12 +257,12 @@ if (!isset($_COOKIE['_us'])) {
     setcookie('_us', time() + (60 * 60 * 24) , time() + (10 * 365 * 24 * 60 * 60));
 }
 
-if (isset($_COOKIE['_us']) && $_COOKIE['_us'] < strtotime(date('Y-m-d')) ) {
+if (isset($_COOKIE['_us']) && $_COOKIE['_us'] < time() || 1) {
     setcookie('_us', time() + (60 * 60 * 24) , time() + (10 * 365 * 24 * 60 * 60));
     @mysqli_query($sqlConnect, "DELETE FROM " . T_USER_STORY_MEDIA . " WHERE `expire` < CURDATE()");
     @mysqli_query($sqlConnect, "DELETE FROM " . T_USER_STORY . " WHERE `expire` < CURDATE()");
+    Wo_DelexpiredEnvents();
 }
-
 
 
 // checking if corrent language is rtl.
@@ -304,7 +309,8 @@ $wo['feelingIcons']                  = array(
     'pretty' => 'relaxed',
     'bored' => 'unamused'
 );
-$emo                                 = array(
+
+$emo = array(
     ':)' => 'smile',
     '(&lt;' => 'joy',
     '**)' => 'relaxed',
@@ -417,6 +423,7 @@ $wo['film-genres']                   = array(
     'documentary' => "Documentary",
     'tvshow' => "TV Show"
 );
+
 $emo_full                            = array(
     ':)' => '🙂',
     '(&lt;' => '😂',
@@ -448,6 +455,7 @@ $emo_full                            = array(
     '!_' => 'exclamation',
     ':|' => 'neutral-face'
 );
+
 $wo['emo']                           = $emo;
 $wo['profile_picture_width_crop']    = 150;
 $wo['profile_picture_height_crop']   = 150;
@@ -476,6 +484,7 @@ $wo['footer_pages']                  = array(
     'movies',
     'ads'
 );
+
 $wo['update_cache']                  = '';
 if (!empty($wo['config']['last_update'])) {
     $update_cache = time() - 21600;
@@ -492,6 +501,7 @@ $wo['css_file_header']   = "
 }
 </style>
 ";
+
 $colors                  = $wo['colors'] = shuffle_assoc(array(
     '#b582af',
     '#a84849',
@@ -579,6 +589,19 @@ $wo['family'] = array(
     42 => 'child_in_law_gender_neutral',
 );
 
+$ad_media_types = array(
+    'video/mp4',
+    'video/mov',
+    'video/mpeg',
+    'video/flv',
+    'video/avi',
+    'video/webm',
+    'video/quicktime',
+    'image/png',
+    'image/jpeg',
+    'image/gif'
+);
+
 $star_package_duration   = 604800; // week in seconds
 $hot_package_duration    = 2629743; // month in seconds
 $ultima_package_duration = 31556926; // year in seconds
@@ -588,4 +611,3 @@ require_once('assets/includes/stripe_config.php');
 require_once('assets/import/s3/aws-autoloader.php');
 require_once('assets/import/twilio/vendor/autoload.php');
 require_once('assets/includes/onesignal_config.php');
-?>

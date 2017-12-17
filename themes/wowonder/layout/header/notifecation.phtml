@@ -176,11 +176,15 @@ if (!empty($wo['notification']['type'])) {
     }
 
     if ($wo['notification']['type'] == 'admin_notification') {
-        $wo['notification']['type_text'] = $wo['notification']['text'];
-        $wo['notification']['url']       = $wo['notification']['full_link']; 
-        $wo['notification']['ajax_url']  = $wo['notification']['full_link']; 
-        $wo['notification']['wo_url']    = false; 
-        $wo['notification']['icon']     .= 'eye';
+        $theme                                    = $wo['config']['theme'];
+        $wo['notification']['type_text']          = $wo['notification']['text'];
+        $wo['notification']['url']                = $wo['notification']['full_link']; 
+        $wo['notification']['ajax_url']           = $wo['notification']['full_link']; 
+        $wo['notification']['wo_url']             = false; 
+        $wo['notification']['notifier']['name']   = $wo['config']['siteName']; 
+        $wo['notification']['notifier']['avatar'] = "themes/$theme/img/icon.png"; 
+        $wo['notification']['icon']              .= 'eye';
+
     }
     if ($wo['notification']['type'] == 'page_admin') {
         $wo['notification']['type_text'] = $wo['lang']['added_page_admin'];
@@ -206,6 +210,11 @@ if (!empty($wo['notification']['type'])) {
         $wo['notification']['type_text'] = $wo['notification']['text'];
         $wo['notification']['url']       = $wo['notification']['url']; 
         $wo['notification']['icon']     .= 'times';
+    }
+    if ($wo['notification']['type'] == 'sent_u_money') {
+        $wo['notification']['type_text'] = $wo['notification']['text'];
+        $wo['notification']['url']       = $wo['notification']['url']; 
+        $wo['notification']['icon']     .= 'money';
     }
 }
 ?>

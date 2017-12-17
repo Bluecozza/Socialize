@@ -1,6 +1,10 @@
 <?php
-$IsOwner = Wo_IsOnwer($wo['user_profile']['user_id']);
-$IsOwnerUser = Wo_IsOnwerUser($wo['user_profile']['user_id']);
+$IsOwner       = Wo_IsOnwer($wo['user_profile']['user_id']);
+$IsOwnerUser   = Wo_IsOnwerUser($wo['user_profile']['user_id']);
+
+if ($wo['loggedin'] && $IsOwnerUser) {
+   $wo['pr_complition'] = Wo_ProfileCompletion();
+}
 ?>
 <div class="row page-margin profile" data-page="timeline" data-id="<?php echo $wo['user_profile']['user_id'];?>">
     <div class="profile-container">
@@ -21,7 +25,7 @@ $IsOwnerUser = Wo_IsOnwerUser($wo['user_profile']['user_id']);
                             <span class="input-group-btn when-notedit">
                                 <span class="btn btn-upload-image btn-file">
                                     <i class="fa fa-pencil" data-icon="pencil" onclick="Wo_StartRepositioner();"></i>
-                                    <!-- <input type="file" name="cover" accept="image/*" onclick="Wo_StartRepositioner();"> -->
+
                                 </span>
                             </span>
                         </div>
@@ -29,7 +33,6 @@ $IsOwnerUser = Wo_IsOnwerUser($wo['user_profile']['user_id']);
                             <span class="input-group-btn">
                                 <span class="btn btn-upload-image btn-file">
                                     <i class="fa fa-check" data-icon="pencil" onclick="Wo_SubmitRepositioner();"></i>
-                                    <!-- <input type="file" name="cover" accept="image/*" onclick="Wo_StartRepositioner();"> -->
                                 </span>
                             </span>
                         </div>
@@ -37,7 +40,6 @@ $IsOwnerUser = Wo_IsOnwerUser($wo['user_profile']['user_id']);
                             <span class="input-group-btn">
                                 <span class="btn btn-upload-image btn-file">
                                     <i class="fa fa-times" data-icon="pencil" onclick="Wo_StopRepositioner();"></i>
-                                    <!-- <input type="file" name="cover" accept="image/*" onclick="Wo_StartRepositioner();"> -->
                                 </span>
                             </span>
                         </div>
@@ -331,6 +333,13 @@ $IsOwnerUser = Wo_IsOnwerUser($wo['user_profile']['user_id']);
         </div>
     </div>
     <div class="col-md-4">
+        <!-- Profile Percentage System -->
+
+        <?php if ($IsOwnerUser === true && array_sum($wo['pr_complition']) < 100): ?>
+            <?php echo Wo_LoadPage('timeline/profile-completion'); ?>
+        <?php endif; ?>
+        
+
         <ul class="list-group">
             <li class="list-group-item text-muted hidden" contenteditable="false">
                 <?php echo $wo['lang']['details']; ?>
@@ -918,10 +927,18 @@ $(function () {
         $('[id^=updateImage-<?php echo $wo['user_profile']['id']; ?>]').attr('data-target', '#ProfileImageModal-Stopped'); 
         $('[id^=updateImage-<?php echo $wo['user_profile']['id']; ?>]').attr('onclick', 'Wo_OpenProfilePicture("' + data.img_or + '");');
         $('[id^=updateImage-<?php echo $wo['user_profile']['id']; ?>]').attr("src", data.img);
+
+        if($("ul[data-profile-completion]").length == 1) {
+            if ($('#add-profile-avatar').length == 1) {
+                window.location.reload();
+            }
+        }
       }
+
       $('.user-avatar-uploading-container,.user-avatar-uploading-progress').fadeOut(200);
     }
   });
+
   $('form.cover-position-form').ajaxForm({
         url:  Wo_Ajax_Requests_File() + '?f=re_cover',
         dataType:  'json', 
@@ -1110,3 +1127,9 @@ function Wo_OpenProfilePicture(image) {
     });
 }
 </script>
+
+<style>
+.post-youtube iframe {
+    overflow: hidden !important; height: 360px !important;
+}
+</style>

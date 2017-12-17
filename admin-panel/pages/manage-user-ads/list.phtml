@@ -21,7 +21,7 @@
      <?php echo $wo['user_ad']['views']?>
    </td>
    <td>
-      <?php if (Wo_IsAdmin() == true) { ?><a href="<?php echo $wo['user_ad']['edit-url']?>" class="btn btn-info waves-effect waves-light" target="_blank">EDIT</a><?php } ?>
+      <?php if (Wo_IsAdmin() == true) { ?><!-- <a href="<?php echo $wo['user_ad']['edit-url']?>" class="btn btn-info waves-effect waves-light" target="_blank">EDIT</a><?php } ?> -->
       <button type="button" class="btn btn-danger waves-effect waves-light delete-ad" id="<?php echo $wo['user_ad']['id']?>">DELETE</button>
    </td>
 </tr>

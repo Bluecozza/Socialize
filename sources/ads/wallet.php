@@ -13,6 +13,7 @@ if (isset($_SESSION['replenished_amount']) && $_SESSION['replenished_amount'] > 
 $wo['description'] = $wo['config']['siteDesc'];
 $wo['keywords']    = $wo['config']['siteKeywords'];
 $wo['page']        = 'ads';
+$wo['ap']          = 'wallet';
 $wo['title']       = 'Wallet';
 $wo['ads']         = Wo_GetMyAds();
 $wo['content']     = Wo_LoadPage('ads/wallet');

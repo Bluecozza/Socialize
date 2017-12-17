@@ -270,8 +270,15 @@ switch ($page) {
     case 'friends-nearby':
         include('sources/friends_nearby.php');
         break;
+    case 'send_money':
+        include('sources/ads/send_money.php');
+        break;
+    case 'wallet':
+        include('sources/ads/wallet.php');
+        break;
 
 }
+
 if (empty($wo['content'])) {
     include('sources/404.php');
 }

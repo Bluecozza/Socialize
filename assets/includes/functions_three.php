@@ -651,7 +651,6 @@ function Wo_CountRefs($user_id = 0) {
     $fetched_data  = mysqli_fetch_assoc($sql_query_one);
     return $fetched_data['count'];
 }
-// Blog SYSYTEM
 function Wo_InsertBlog($registration_data = array()) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false) {
@@ -1110,10 +1109,12 @@ function Wo_GetMyBlogs($user = 0, $offset = 0) {
     }
     $user   = Wo_Secure($user);
     $offset = Wo_Secure($offset);
-    $query  = mysqli_query($sqlConnect, "SELECT * FROM  " . T_BLOG . " WHERE `user` = '$user' {$after_blogs} ORDER BY `id` DESC LIMIT 10");
+    $t_blog = T_BLOG;
+    $query  = mysqli_query($sqlConnect, "SELECT * FROM  `$t_blog` WHERE `user` = '$user' {$after_blogs} ORDER BY `id` DESC LIMIT 10");
     while ($fetched_data = mysqli_fetch_assoc($query)) {
         $data[] = Wo_GetArticle($fetched_data['id']);
     }
+
     return $data;
 }
 function Wo_GetBlogs($args = array()) {
@@ -1717,7 +1718,7 @@ function Wo_ThreadReply($registration_data = array()) {
     return false;
 }
 function Wo_BbcodeToHtml($bbtext) {
-    $bbtags     = array(
+    $bbtags  = array(
         '[paragraph]' => '<p>',
         '[/paragraph]' => '</p>',
         '[left]' => '<p style="text-align:left;">',
@@ -1758,22 +1759,35 @@ function Wo_BbcodeToHtml($bbtext) {
         '[code]' => '<code>',
         '[/code]' => '</code>'
     );
+
     $bbtext     = str_ireplace(array_keys($bbtags), array_values($bbtags), $bbtext);
     $bbextended = array(
         "/\[url](.*?)\[\/url]/i" => "<a href=\"http://$1\" title=\"$1\">$1</a>",
+
         "/\[url=(.*?)\](.*?)\[\/url\]/i" => "<a href=\"$1\" title=\"$1\">$2</a>",
+
         "/\[email=(.*?)\](.*?)\[\/email\]/i" => "<a href=\"mailto:$1\">$2</a>",
+
         "/\[mail=(.*?)\](.*?)\[\/mail\]/i" => "<a href=\"mailto:$1\">$2</a>",
+
         "/\[img\]([^[]*)\[\/img\]/i" => "<img src=\"$1\" alt=\" \" />",
+
+        "/\[iframe\]([^[]*)\[\/iframe\]/i" => "<iframe src=\"$1\" frameborder=\"0\" allowfullscreen width=\"560\" height=\"315\" /></iframe>",
+
         "/\[image\]([^[]*)\[\/image\]/i" => "<img src=\"$1\" alt=\" \" />",
+
         "/\[image_left\]([^[]*)\[\/image_left\]/i" => "<img src=\"$1\" alt=\" \" class=\"img_left\" />",
+
         "/\[image_right\]([^[]*)\[\/image_right\]/i" => "<img src=\"$1\" alt=\" \" class=\"img_right\" />"
     );
+
     foreach ($bbextended as $match => $replacement) {
         $bbtext = preg_replace($match, $replacement, $bbtext);
     }
+
     return $bbtext;
 }
+
 function Wo_ThreadUpdate($id = 0, $update_data = array()) {
     global $sqlConnect, $wo;
     $update = array();
@@ -3463,7 +3477,7 @@ function Wo_GetSideBarAds() {
     $query = mysqli_query($sqlConnect, $sql);
     $data  = array();
     while ($fetched_data = mysqli_fetch_assoc($query)) {
-        $fetched_data['image']       = Wo_GetMedia($fetched_data['image']);
+        $fetched_data['ad_media']    = Wo_GetMedia($fetched_data['ad_media']);
         $fetched_data['headline']    = Wo_GetShortTitle($fetched_data['headline'], false, 30);
         $fetched_data['description'] = Wo_GetShortTitle($fetched_data['description'], false, 60);
         if ($fetched_data['bidding'] == 'views') {
@@ -3493,19 +3507,7 @@ function Wo_DeleteMovieCommReply($id, $movie) {
     @mysqli_query($sqlConnect, "DELETE FROM " . T_BM_DISLIKES . " WHERE `movie_commreply_id` = '$id' AND `movie_id` = '$movie'");
     return mysqli_query($sqlConnect, "DELETE FROM " . T_MOVIE_COMM_REPLIES . " WHERE `id` = '$id'");
 }
-function Wo_RegisterUserAds($registration_data = array()) {
-    global $sqlConnect, $wo;
-    if ($wo['loggedin'] == false) {
-        return false;
-    }
-    $fields = '`' . implode('`, `', array_keys($registration_data)) . '`';
-    $data   = '\'' . implode('\', \'', $registration_data) . '\'';
-    $query  = mysqli_query($sqlConnect, "INSERT INTO " . T_USER_ADS . " ({$fields}) VALUES ({$data})");
-    if ($query) {
-        return mysqli_insert_id($sqlConnect);
-    }
-    return false;
-}
+
 function Wo_UpdateUserAds($id, $update_data = array()) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false || empty($update_data)) {
@@ -3519,6 +3521,7 @@ function Wo_UpdateUserAds($id, $update_data = array()) {
     $query     = mysqli_query($sqlConnect, $query_one);
     return $query;
 }
+
 function Wo_IsAdsOwnerNotAdmin($ads_id = 0, $user_id = 0) {
     global $sqlConnect, $wo;
     if (empty($user_id)) {
@@ -3601,23 +3604,29 @@ function Wo_GetMyAds($args = array()) {
     }
     return $data;
 }
+
 function Wo_GetUserAdData($id) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false || !$id || !is_numeric($id) || $id < 1) {
         return false;
     }
-    $query        = mysqli_query($sqlConnect, "SELECT * FROM  " . T_USER_ADS . " WHERE `id` = '$id'");
+
+    $table        = T_USER_ADS;
+    $query        = mysqli_query($sqlConnect, "SELECT * FROM  `$table` WHERE `id` = '$id' ");
     $fetched_data = mysqli_fetch_assoc($query);
     $data         = false;
+
     if (!empty($fetched_data)) {
         $fetched_data['user_data']   = Wo_UserData($fetched_data['user_id']);
         $fetched_data['is_owner']    = Wo_IsAdsOwner($fetched_data['id']);
         $fetched_data['country_ids'] = array_values(explode(',', $fetched_data['audience']));
-        $fetched_data['image']       = Wo_GetMedia($fetched_data['image']);
+        $fetched_data['ad_media']    = Wo_GetMedia($fetched_data['ad_media']);
         $data                        = $fetched_data;
     }
+
     return $data;
 }
+
 function Wo_GetPostAds($last_id = 0) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false) {
@@ -3642,11 +3651,11 @@ function Wo_GetPostAds($last_id = 0) {
         ORDER BY `id` DESC LIMIT 100";
     $query        = mysqli_query($sqlConnect, $sql);
     $fetched_data = mysqli_fetch_assoc($query);
-    $data         = false;
+    $data         = array();
     if (is_array($fetched_data) && !empty($fetched_data)) {
         $fetched_data['user_data'] = Wo_UserData($fetched_data['user_id']);
         $fetched_data['is_owner']  = Wo_IsAdsOwner($fetched_data['id']);
-        $fetched_data['image']     = Wo_GetMedia($fetched_data['image']);
+        $fetched_data['ad_media']  = Wo_GetMedia($fetched_data['ad_media']);
         $fetched_data['postType']  = 'ad';
         $data                      = $fetched_data;
     }
@@ -3667,8 +3676,7 @@ function Wo_GetAds($last_id = 0) {
     while ($fetched_data = mysqli_fetch_assoc($query)) {
         $fetched_data['user_data'] = Wo_UserData($fetched_data['user_id']);
         $fetched_data['is_owner']  = Wo_IsAdsOwner($fetched_data['id']);
-        $fetched_data['image']     = Wo_GetMedia($fetched_data['image']);
-        $fetched_data['edit']      = Wo_GetMedia($fetched_data['image']);
+        $fetched_data['ad_media']  = Wo_GetMedia($fetched_data['ad_media']);
         $fetched_data['edit-url']  = Wo_SeoLink('index.php?link1=manage-ads&id=' . $fetched_data['id']);
         $data[]                    = $fetched_data;
     }
@@ -3773,23 +3781,7 @@ function Wo_RegisterAdClick($id) {
     }
     return $result;
 }
-function Wo_ToggleUserAdStatus($id) {
-    global $sqlConnect, $wo;
-    if ($wo['loggedin'] == false || !$id) {
-        return false;
-    }
-    $ad        = Wo_GetUserAdData($id);
-    $result    = false;
-    $ad_status = null;
-    if ($ad && is_array($ad) && !empty($ad) && Wo_IsAdsOwner($id)) {
-        $ad_status   = ($ad['status'] == 1) ? 0 : 1;
-        $update_data = array(
-            'status' => $ad_status
-        );
-        $result      = Wo_UpdateUserAds($id, $update_data);
-    }
-    return $result;
-}
+
 function Wo_RegisterAdView($id) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false || !$id) {
@@ -4017,14 +4009,17 @@ function Wo_RegisterAdminNotification($registration_data = array()) {
     $time  = time();
     $sql   = "INSERT INTO " . T_NOTIFICATION . " (`notifier_id`,`recipient_id`,`type`,`text`,`full_link`,`time`) VALUES ";
     $val   = array();
+
     foreach ($registration_data['recipients'] as $user_id) {
         if ($admin != $user_id) {
             $val[] = "('$admin','$user_id','admin_notification','$text','$link','$time')";
         }
     }
+
     $query = mysqli_query($sqlConnect, ($sql . implode(',', $val)));
     return $query;
 }
+
 function Wo_HidePost($id = false) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false || !$id || $id < 1) {

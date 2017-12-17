@@ -14,17 +14,9 @@
         </span>
     </a>
     </span>
-   <!-- <div class="user-username">
-        @<?php echo $wo['UsersList']['username']; ?>
-    </div>-->
     <?php if($wo['config']['user_lastseen'] == 1 && $wo['UsersList']['showlastseen'] != 0) { ?>
     <div class="user-lastseen">
         <?php echo Wo_UserStatus($wo['UsersList']['user_id'],$wo['UsersList']['lastseen']); ?>
     </div>
     <?php } ?>
-    <!--<div class="<?php echo Wo_RightToLeft('pull-right');?> user-follow-btn">
-        <div class="user-follow-button">
-            <?php echo Wo_GetFollowButton($wo['UsersList']['user_id']);?>
-        </div>
-    </div>-->
 </div>

@@ -47,7 +47,12 @@ if ($wo['emailNotification']['type'] == 'joined_group') {
     $group = Wo_GroupData($wo['emailNotification']['group_id']);
     $wo['emailNotification']['type_text'] = 'joined your group (' . $group['name'] . ')';
 }
+
+if ($wo['emailNotification']['type'] == 'sent_message') {
+  $wo['emailNotification']['type_text'] = 'Sent you a new message';
+}
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
   <head>
@@ -132,8 +137,20 @@ if ($wo['emailNotification']['type'] == 'joined_group') {
                         <a href="<?php echo $wo['emailNotification']['notifier']['url'];?>" style="text-decoration:none;color:#444;"><img src="<?php echo $wo['emailNotification']['notifier']['avatar'];?>" style="width:60px;float:left;border-radius:100px; margin-right:10px;" alt="" />
                         <?php echo $wo['emailNotification']['notifier']['name'];?></a>
                         <div style="color:#666;font-size:12px;">
-                          <?php echo $wo['emailNotification']['type_text'];?>
-                          <?php echo (!empty($wo['emailNotification']['post_data']['text'])) ? '"' . $wo['emailNotification']['post_data'][ 'text'] . '"' : '';?>.
+                          <b>
+                            <?php echo $wo['emailNotification']['type_text'];?>:
+                          </b>
+                          <span>
+                            <?php
+                              if (!empty($wo['emailNotification']['post_data']['text'])) {
+                                echo $wo['emailNotification']['post_data'][ 'text'];
+                              }
+
+                              else if(!empty($wo['emailNotification']['msg_text'])){
+                                echo "\"" . $wo['emailNotification']['msg_text'] . "\"";
+                              }
+                            ?>
+                          </span>
                         </div>
                       </td>
                     </tr>

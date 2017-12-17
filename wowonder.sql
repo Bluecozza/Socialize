@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 14, 2017 at 01:02 PM
+-- Generation Time: Dec 11, 2017 at 04:21 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 7.1.1
 
@@ -424,9 +424,9 @@ CREATE TABLE `Wo_Config` (
 
 INSERT INTO `Wo_Config` (`id`, `name`, `value`) VALUES
 (1, 'siteName', 'WoWonder'),
-(2, 'siteTitle', 'WoWonder Social Network Platform'),
+(2, 'siteTitle', 'WoWonder - The Ultimate PHP Social Network Platform'),
 (3, 'siteKeywords', 'social, wowonder, social site'),
-(4, 'siteDesc', 'WoWonder v1.5.3.2 is a Social Networking Platform. With our new feature, user can wonder posts, photos,'),
+(4, 'siteDesc', 'WoWonder v1.5.4 is a Social Networking Platform. With our new feature, user can wonder posts, photos,'),
 (5, 'siteEmail', 'deendoughouz@gmail.com'),
 (6, 'defualtLang', 'english'),
 (7, 'emailValidation', '0'),
@@ -539,8 +539,8 @@ INSERT INTO `Wo_Config` (`id`, `name`, `value`) VALUES
 (115, 'lifetime_boosts', '40'),
 (116, 'chat_outgoing_background', '#fff9f9'),
 (117, 'windows_app_version', '1.0'),
-(118, 'widnows_app_api_id', 'df00b32d7b83a3b4a1ed12ff10f26b8d'),
-(119, 'widnows_app_api_key', '6ea8db53dc2dd196508a7b409e05b860'),
+(118, 'widnows_app_api_id', 'c93eb8d240e06fa7a93808740e4a87aa'),
+(119, 'widnows_app_api_key', '40a6de77decc7454f114b4099d938c77'),
 (120, 'stripe_id', ''),
 (121, 'stripe_secret', ''),
 (122, 'credit_card', 'no'),
@@ -594,7 +594,10 @@ INSERT INTO `Wo_Config` (`id`, `name`, `value`) VALUES
 (170, 'push_messages', '0'),
 (171, 'update_db_153', 'updated'),
 (172, 'ads_currency', 'USD'),
-(173, 'web_push', '0');
+(173, 'web_push', '0'),
+(174, 'playtube_url', ''),
+(175, 'connectivitySystemLimit', '5000'),
+(176, 'video_ad_skip', '6');
 
 -- --------------------------------------------------------
 
@@ -2038,7 +2041,37 @@ INSERT INTO `Wo_Langs` (`id`, `lang_key`, `english`, `arabic`, `dutch`, `french`
 (1104, 'conver_deleted', 'Conversation has been deleted.', 'تم حذف المحادثة.', 'Conversatie is verwijderd.', 'La conversation a été supprimée.', 'Konversation wurde gelöscht.', 'La conversazione è stata eliminata.', 'A conversa foi excluída.', 'Разговор удален.', 'Se ha eliminado la conversación.', 'Sohbet silindi.'),
 (1105, 'group_name_limit', 'Group name must be 4/15 characters', 'يجب أن يكون اسم المجموعة 4/15 حرفا', 'De groepsnaam moet 4/15 karakters zijn', 'Le nom du groupe doit comporter 4/15 caractères', 'Der Gruppenname muss 4/15 Zeichen lang sein', 'Il nome del gruppo deve essere di 4/15 caratteri', 'O nome do grupo deve ser de 4/15 caracteres', 'Имя группы должно быть 4/15 символов', 'El nombre del grupo debe tener 4/15 caracteres', 'Grup adı 4/15 karakter olmalıdır'),
 (1106, 'group_avatar_image', 'Group avatar must be an image', 'يجب أن تكون الصورة الرمزية للمجموعة صورة', 'Groep avatar moet een afbeelding zijn', NULL, 'Gruppen-Avatar muss ein Bild sein', NULL, 'O avatar do grupo deve ser uma imagem', 'Групповой аватар должен быть изображением', 'El avatar del grupo debe ser una imagen', 'Grup avatar bir resim olmalı'),
-(1107, 'explore', 'Explore', 'إستكشاف', 'Onderzoeken', 'Explorer', 'Erforschen', 'Esplorare', 'Explorar', 'Исследовать', 'Explorar', 'Keşfetmek');
+(1107, 'explore', 'Explore', 'إستكشاف', 'Onderzoeken', 'Explorer', 'Erforschen', 'Esplorare', 'Explorar', 'Исследовать', 'Explorar', 'Keşfetmek'),
+(1108, 'format_image', 'File Format image', 'تنسيق ملف الصورة', 'Bestandsformaat afbeelding', 'Image au format du fichier', 'Dateiformat Bild', 'Immagine del formato file', 'Imagem do formato do arquivo', 'Изображение формата файла', 'Imagen de formato de archivo', 'Dosya Biçimi resmi'),
+(1109, 'format_video', 'File Format video', 'تنسيق ملف الفيديو', 'Bestandsformaat video', 'Format de fichier vidéo', 'Dateiformatvideo', 'Formato file video', 'Vídeo do formato do arquivo', 'Формат файла видео', 'Formato de archivo video', 'Dosya Biçimi videosu'),
+(1110, 'video', 'Video', 'فيديو', 'Video', 'Vidéo', 'Video', 'video', 'Vídeo', 'видео', 'Vídeo', 'Video'),
+(1111, 'video_player', 'VideoPlayer', 'مشغل فديوهات', 'Video speler', 'Lecteur vidéo', 'Videoplayer', 'Lettore video', 'VideoPlayer', 'Видео проигрыватель', 'Reproductor de video', 'Video oynatıcı'),
+(1112, 'no_file_chosen', 'No file chosen', 'لم تقم باختيار ملف', 'Geen bestand gekozen', 'Aucun fichier choisi', 'Keine Datei ausgewählt', 'Nessun file scelto', 'Nenhum arquivo selecionado', 'Файл не выбран', 'Ningún archivo elegido', 'Dosya seçili değil'),
+(1113, 'choose_file', 'Choose File', 'اختر ملف', 'Kies bestand', 'Choisir le fichier', 'Datei wählen', 'Scegli il file', 'Escolher arquivo', 'Выберите файл', 'Elija el archivo', 'Dosya seçin'),
+(1114, 'media', 'Media File', 'ملف وسائط', 'Media bestand', 'Fichier multimédia', 'Mediendatei', 'File multimediale', 'Arquivo de mídia', 'Файл мультимедиа', 'Archivo multimedia', 'Medya dosyası'),
+(1115, 'select_valid_img_vid', 'Media file is invalid. Please select a valid image or video', 'ملف الوسائط غير صالح. الرجاء تحديد صورة أو فيديو صالحين', 'Mediabestand is ongeldig. Selecteer een geldige afbeelding of video', 'Le fichier multimédia est invalide. Veuillez sélectionner une image ou une vidéo valide', 'Mediendatei ist ungültig. Bitte wählen Sie ein gültiges Bild oder Video aus', 'Il file multimediale non è valido. Si prega di selezionare unimmagine o un video valido', 'O arquivo de mídia é inválido. Selecione uma imagem ou vídeo válido', 'Недопустимый файл мультимедиа. Выберите действительное изображение или видео', 'El archivo multimedia no es válido. Seleccione una imagen o video válido', 'Medya dosyası geçersiz. Lütfen geçerli bir resim veya video seçin'),
+(1116, 'select_valid_img', 'Media file is invalid. Please select a valid image', 'ملف الوسائط غير صالح. الرجاء تحديد صورة صالحة', 'Mediabestand is ongeldig. Selecteer een geldige afbeelding', 'Le fichier multimédia est invalide. Veuillez sélectionner une image valide', 'Mediendatei ist ungültig. Bitte wählen Sie ein gültiges Bild', 'Il file multimediale non è valido. Si prega di selezionare unimmagine valida', 'O arquivo de mídia é inválido. Selecione uma imagem válida', 'Недопустимый файл мультимедиа. Выберите действительное изображение', 'El archivo multimedia no es válido. Seleccione una imagen válida', 'Medya dosyası geçersiz. Lütfen geçerli bir resim seçin'),
+(1117, 'select_valid_vid', 'Media file is invalid. Please select a valid video', 'ملف الوسائط غير صالح. الرجاء تحديد فيديو صالح', 'Mediabestand is ongeldig. Selecteer een geldige video', 'Le fichier multimédia est invalide. Veuillez sélectionner une vidéo valide', 'Mediendatei ist ungültig. Bitte wählen Sie ein gültiges Video aus', 'Il file multimediale non è valido. Si prega di selezionare un video valido', 'O arquivo de mídia é inválido. Selecione um vídeo válido', 'Недопустимый файл мультимедиа. Выберите действительное видео', 'El archivo multimedia no es válido. Seleccione un video válido', 'Medya dosyası geçersiz. Lütfen geçerli bir video seçin'),
+(1118, 'drop_img_here', 'Drop Image Here', 'إسقاط الصورة هنا', 'Zet hier een afbeelding neer', 'Déposer limage ici', 'Bild hier ablegen', 'Rilascia limmagine qui', 'Largue a imagem aqui', 'Отбросьте изображение здесь', 'Dejar caer la imagen aquí', 'Buraya Resim Aç'),
+(1119, 'or', 'OR', 'أو', 'OF', 'OU', 'ODER', 'O', 'OU', 'ИЛИ', 'O', 'VEYA'),
+(1120, 'browse_to_upload', 'Browse To Upload', 'تصفح لتحميل', 'Blader naar uploaden', 'Parcourir pour télécharger', 'Durchsuchen zum Hochladen', 'Sfoglia per caricare', 'Navegue para carregar', 'Просмотр загрузки', 'Buscar para cargar', 'Yüklemeye Gözat'),
+(1121, 'pr_completion', 'Profile Completion', 'الملف الشخصي الانتهاء', 'Profiel voltooiing', 'Achèvement du profil', 'Profil Fertigstellung', 'Completamento del profilo', 'Conclusão do perfil', 'Завершение профиля', 'Terminación del perfil', 'Profil Tamamlama'),
+(1122, 'ad_pr_picture', 'Add your profile picture', 'إضافة صورة ملفك الشخصي', 'Voeg je profielfoto toe', 'Ajouter votre photo de profil', 'Fügen Sie Ihr Profilbild hinzu', 'Aggiungi la tua immagine del profilo', 'Adicione sua foto de perfil', 'Добавьте свое фото профиля', 'Agrega tu foto de perfil', 'Profil resmini ekle'),
+(1123, 'add_ur_name', 'Add your name', 'أضف اسمك', 'Voeg je naam toe', 'Ajoutez votre nom', 'Fügen Sie Ihren Namen hinzu', 'Aggiungi il tuo nome', 'Adicione seu nome', 'Добавьте свое имя', 'Agrega tu nombre', 'Adınızı ekleyin'),
+(1124, 'ad_ur_workplace', 'Add your workplace', 'أضف مكان عملك', 'Voeg uw werkplek toe', 'Ajoutez votre lieu de travail', 'Fügen Sie Ihren Arbeitsplatz hinzu', 'Aggiungi il tuo posto di lavoro', 'Adicione seu local de trabalho', 'Добавьте свое рабочее место', 'Agregue su lugar de trabajo', 'İş yerinizi ekleyin'),
+(1125, 'ad_ur_country', 'Add your country', 'أضف بلدك', 'Voeg uw land toe', 'Ajoutez votre pays', 'Fügen Sie Ihr Land hinzu', 'Aggiungi il tuo paese', 'Adicione seu país', 'Добавьте свою страну', 'Agrega tu país', 'Ülkenizi ekle'),
+(1126, 'ad_ur_address', 'Add your address', 'أضف عنوانك', 'Voeg uw adres toe', 'Ajoutez votre adresse', 'Fügen Sie Ihre Adresse hinzu', 'Aggiungi il tuo indirizzo', 'Adicione seu endereço', 'Добавьте свой адрес', 'Agrega tu dirección', 'Adresinizi ekleyin'),
+(1127, 'e_sent_msg', 'Someone Send me a message', 'شخص أرسل لي رسالة', 'Iemand Stuur mij een bericht', 'Quelquun Envoyez moi un message', 'Jemand Senden Sie mir eine Nachricht', 'Qualcuno Inviami un messaggio', 'Alguém Envie-me uma mensagem', 'Кто-нибудь Послать мне сообщение', 'Alguien me envía un mensaje', 'Birisi bana bir mesaj gönder'),
+(1128, 'send_money', 'Send money', 'إرسال الأموال', 'Stuur geld', 'Envoyer de largent', 'Geld schicken', 'Inviare soldi', 'Enviar dinheiro', 'Отправлять деньги', 'Enviar dinero', 'Para göndermek'),
+(1129, 'u_send_money', 'You can send money to your friends, acquaintances or anyone', 'يمكنك إرسال الأموال إلى أصدقائك، معارفك أو أي شخص', 'Je kunt geld sturen naar je vrienden, kennissen of wie dan ook', 'Vous pouvez envoyer de largent à vos amis, connaissances ou nimporte qui', 'Sie können Geld an Ihre Freunde, Bekannten oder irgendjemanden senden', 'Puoi inviare denaro ai tuoi amici, conoscenti o chiunque altro', 'Você pode enviar dinheiro para seus amigos, conhecidos ou qualquer um', 'Вы можете отправлять деньги своим друзьям, знакомым или кому-либо', 'Puede enviar dinero a sus amigos, conocidos o cualquier persona', 'Arkadaşlarınız, tanıdıklarınız veya herhangi birisine para gönderebilirsiniz.'),
+(1130, 'available_balance', 'Available balance', 'الرصيد المتوفر', 'Beschikbaar saldo', 'Solde disponible', 'Verfügbares Guthaben', 'Saldo disponibile', 'Saldo disponível', 'Доступные средства', 'Saldo disponible', 'Kalan bakiye'),
+(1131, 'send_to', 'Send To', 'ارسل إلى', 'Verzenden naar', 'Envoyer à', 'Senden an', 'Inviare a', 'Enviar para', 'Отправить', 'Enviar a', 'Gönderildi'),
+(1132, 'search_name_or_email', 'Search for user name, e-mail', 'البحث عن اسم المستخدم، والبريد الإلكتروني', 'Zoeken naar gebruikersnaam, e-mail', 'Recherche de nom dutilisateur, e-mail', 'Suchen Sie nach Benutzername, E-Mail', 'Cerca nome utente, e-mail', 'Procure por nome de usuário, e-mail', 'Поиск имени пользователя, электронной почты', 'Buscar nombre de usuario, correo electrónico', 'Kullanıcı adını, e-postasını ara'),
+(1133, 'money_sent_to', 'Your money was successfully sent to', 'تم إرسال أموالك بنجاح إلى', 'Uw geld is succesvol verzonden naar', 'Votre argent a été envoyé avec succès à', 'Ihr Geld wurde erfolgreich an gesendet', 'Il tuo denaro è stato inviato con successo', 'Seu dinheiro foi enviado com sucesso para', 'Ваши деньги были успешно отправлены', 'Su dinero fue enviado exitosamente a', 'Paranız başarıyla gönderildi'),
+(1134, 'sent_you', 'Sent you', 'ارسلت لك', 'Stuurde je', 'Vous a envoyé', 'Hat dich geschickt', 'Ti ho inviato', 'Enviei a você', 'Отправлено Вам', 'Enviado', 'Seni gönderdi'),
+(1135, 'amount_exceded', 'The amount exceded your current balance!', 'المبلغ المستحق رصيدك الحالي!', 'Het bedrag overschreed je huidige saldo!', 'Le montant a dépassé votre solde actuel!', 'Der Betrag übertraf Ihr aktuelles Guthaben!', 'Limporto ha superato il tuo saldo attuale!', 'O valor excedeu o seu saldo atual!', 'Сумма превысила ваш текущий баланс!', '¡La cantidad excedió su saldo actual!', 'Miktar, şu anki bakiyenizi aştı!'),
+(1136, 'custom_thumbnail', 'Custom Thumbnail', 'صورة مصغرة مخصصة', 'Aangepaste miniatuur', 'Miniature personnalisée', 'Benutzerdefiniertes Miniaturbild', 'Miniatura personalizzata', 'Miniatura personalizada', 'Пользовательская миниатюра', 'Miniatura personalizada', 'Özel Küçük Boy'),
+(1137, 'cntc_limit_reached', 'You have reached your limit of {{CNTC_LIMIT}} friends!', 'لقد بلغت الحد المسموح به لعدد {{CNTC_LIMIT}} من الأصدقاء!', 'U heeft uw limiet van {{CNTC_LIMIT}} vrienden bereikt!', 'Vous avez atteint la limite de vos amis {{CNTC_LIMIT}}!', 'Du hast dein Limit von {{CNTC_LIMIT}} Freunden erreicht!', 'Hai raggiunto il limite di {{CNTC_LIMIT}} amici!', 'Você atingiu seu limite de amigos {{CNTC_LIMIT}}!', 'Вы достигли своего предела {{CNTC_LIMIT}} друзей!', '¡Has alcanzado el límite de {{CNTC_LIMIT}} amigos!', '{{CNTC_LIMIT}} arkadaşınızla ilgili sınırınıza ulaştınız!');
 
 -- --------------------------------------------------------
 
@@ -2314,9 +2347,11 @@ CREATE TABLE `Wo_Posts` (
   `postFacebook` varchar(100) NOT NULL DEFAULT '',
   `postFile` varchar(255) NOT NULL DEFAULT '',
   `postFileName` varchar(200) NOT NULL DEFAULT '',
+  `postFileThumb` varchar(3000) NOT NULL DEFAULT '',
   `postYoutube` varchar(255) NOT NULL DEFAULT '',
   `postVine` varchar(32) NOT NULL DEFAULT '',
   `postSoundCloud` varchar(255) NOT NULL DEFAULT '',
+  `postPlaytube` varchar(500) NOT NULL DEFAULT '',
   `postMap` varchar(255) NOT NULL DEFAULT '',
   `postShare` int(11) NOT NULL DEFAULT '0',
   `postPrivacy` enum('0','1','2','3') NOT NULL DEFAULT '1',
@@ -2326,6 +2361,7 @@ CREATE TABLE `Wo_Posts` (
   `postTraveling` varchar(255) NOT NULL DEFAULT '',
   `postWatching` varchar(255) NOT NULL DEFAULT '',
   `postPlaying` varchar(255) NOT NULL DEFAULT '',
+  `postPhoto` varchar(3000) NOT NULL DEFAULT '',
   `time` int(11) NOT NULL DEFAULT '0',
   `registered` varchar(32) NOT NULL DEFAULT '0/0000',
   `album_name` varchar(52) NOT NULL DEFAULT '',
@@ -2500,7 +2536,7 @@ CREATE TABLE `Wo_UserAds` (
   `description` text,
   `location` varchar(1000) NOT NULL DEFAULT 'us',
   `audience` longtext,
-  `image` varchar(3000) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `ad_media` varchar(3000) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `gender` varchar(15) CHARACTER SET utf8 COLLATE utf8_danish_ci NOT NULL DEFAULT 'all',
   `bidding` varchar(15) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `clicks` int(15) NOT NULL DEFAULT '0',
@@ -2584,6 +2620,8 @@ CREATE TABLE `Wo_Users` (
   `e_joined_group` enum('0','1') NOT NULL DEFAULT '1',
   `e_accepted` enum('0','1') NOT NULL DEFAULT '1',
   `e_profile_wall_post` enum('0','1') NOT NULL DEFAULT '1',
+  `e_sentme_msg` enum('0','1') NOT NULL DEFAULT '0',
+  `e_last_notif` varchar(50) NOT NULL DEFAULT '0',
   `status` enum('1','0') NOT NULL DEFAULT '0',
   `active` enum('0','1','2') NOT NULL DEFAULT '0',
   `admin` enum('0','1','2') NOT NULL DEFAULT '0',
@@ -3653,7 +3691,7 @@ ALTER TABLE `Wo_Comment_Replies_Wonders`
 -- AUTO_INCREMENT for table `Wo_Config`
 --
 ALTER TABLE `Wo_Config`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=174;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
 --
 -- AUTO_INCREMENT for table `Wo_CustomPages`
 --
@@ -3763,7 +3801,7 @@ ALTER TABLE `Wo_HiddenPosts`
 -- AUTO_INCREMENT for table `Wo_Langs`
 --
 ALTER TABLE `Wo_Langs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1108;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1138;
 --
 -- AUTO_INCREMENT for table `Wo_Likes`
 --

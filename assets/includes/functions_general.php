@@ -47,7 +47,7 @@ function Wo_CustomCode($a = false,$code = array()){
     return $result;
 }
 function Wo_LoadAdminPage($page_url = '') {
-    global $wo;
+    global $wo,$db;
     $page         = './admin-panel/pages/' . $page_url . '.phtml';
     $page_content = '';
     ob_start();
@@ -1316,7 +1316,6 @@ function Wo_GetIcon($icon) {
 
 function Wo_IsFileAllowed($file_name) {
     global $wo;
-    // $file_name = $_FILES['test']['name'];
     $new_string        = pathinfo($file_name, PATHINFO_FILENAME) . '.' . strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
     $extension_allowed = explode(',', $wo['config']['allowedExtenstion']);
     $file_extension    = pathinfo($new_string, PATHINFO_EXTENSION);
@@ -1324,5 +1323,56 @@ function Wo_IsFileAllowed($file_name) {
         return false;
     }
     return true;
+}
+
+function Wo_ShortText($text = "", $len = 100) {
+    if (empty($text) || !is_string($text) || !is_numeric($len) || $len < 1) {
+        return "****";
+    }
+    if (strlen($text) > $len) {
+        $text = mb_substr($text, 0, $len, "UTF-8") . "..";
+    }
+    return $text;
+}
+
+function Wo_DelexpiredEnvents(){
+    global $wo,$sqlConnect;
+    $t_events     = T_EVENTS;
+    $t_events_inv = T_EVENTS_INV;
+    $t_events_go  = T_EVENTS_GOING;
+    $t_events_int = T_EVENTS_INT;
+    $sql          = "SELECT `id` FROM `$t_events` WHERE `end_date` < CURDATE()";
+
+    @mysqli_query($sqlConnect,"DELETE FROM `$t_events_inv` WHERE `event_id` IN ({$sql})");
+    @mysqli_query($sqlConnect,"DELETE FROM `$t_events_go` WHERE `event_id` IN ({$sql})");
+    @mysqli_query($sqlConnect,"DELETE FROM `$t_events_int` WHERE `event_id` IN ({$sql})");
+    @mysqli_query($sqlConnect,"DELETE FROM `$t_events` WHERE `end_date` < CURDATE()");
+}
+
+function ToObject($array) {
+    $object = new stdClass();
+    foreach ($array as $key => $value) {
+        if (is_array($value)) {
+            $value = ToObject($value);
+        }
+        if (isset($value)) {
+            $object->$key = $value;
+        }
+    }
+    return $object;
+}
+
+function ToArray($obj) {
+    if (is_object($obj))
+        $obj = (array) $obj;
+    if (is_array($obj)) {
+        $new = array();
+        foreach ($obj as $key => $val) {
+            $new[$key] = ToArray($val);
+        }
+    } else {
+        $new = $obj;
+    }
+    return $new;
 }
 ?>

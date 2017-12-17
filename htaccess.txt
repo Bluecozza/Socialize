@@ -115,6 +115,7 @@ RewriteRule ^movies/watch/(\d+)(/?|)$ index.php?link1=watch-film&film-id=$1 [NC,
 # *** ADS ***
 RewriteRule ^ads(/?|)$ index.php?link1=ads [NC,QSA]
 RewriteRule ^wallet(/?|)$ index.php?link1=wallet [NC,QSA]
+RewriteRule ^send_money(/?|)$ index.php?link1=send_money [NC,QSA]
 RewriteRule ^ads/create(/?|)$ index.php?link1=create-ads [NC,QSA]
 RewriteRule ^ads/edit/(\d+)(/?|)$ index.php?link1=edit-ads&id=$1 [NC,QSA]
 RewriteRule ^admin/ads/edit/(\d+)(/?|)$ index.php?link1=manage-ads&id=$1 [NC,QSA]

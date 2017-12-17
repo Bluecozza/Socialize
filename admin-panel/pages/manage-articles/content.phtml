@@ -24,11 +24,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                               <?php 
-				               foreach (Wo_GetBlogs(array('limit' => 900000)) as $wo['blog']) {
-				                  echo Wo_LoadAdminPage('manage-articles/list');
-				                }
-				               ?>
+                              <?php 
+        				                foreach (Wo_GetBlogs(array('limit' => 900000)) as $wo['blog']) {
+        				                  echo Wo_LoadAdminPage('manage-articles/list');
+        				                }
+				                          ?>
                             </tbody>
                         </table>
                     </div>

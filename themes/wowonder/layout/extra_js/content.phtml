@@ -1,31 +1,49 @@
 <script>
 function Wo_RegisterFollow(id, is_confirm) {
   var _follow_con = $('[id=Follow-' + id + ']');
-  is_confirm_f = 0;
+  is_confirm_f    = 0;
+
   if (is_confirm == 1) {
     is_confirm_f = 1;
   }
-  <?php if ($wo['config']['connectivitySystem'] == 0) { ?>
-  html_ = '<button type="button" onclick="Wo_RegisterFollow(' + id + ', ' + is_confirm_f + ')" class="btn-active btn btn-default btn-sm"><i class="fa fa-check progress-icon" data-icon="check"></i><span class="button-text"> <?php echo $wo["lang"]["following_btn"];?></span></button>';
-  if (is_confirm_f == 1) {
-    html_ = '<button type="button" onclick="Wo_RegisterFollow(' + id + ', ' + is_confirm_f + ')" class="btn-requested btn btn-default btn-sm"><i class="fa fa-clock-o progress-icon" data-icon="clock-o"></i><span class="button-text"> <?php echo $wo["lang"]["requested"];?></span></button>';
-  }
-  if (_follow_con.find('button').hasClass('btn-active') || _follow_con.find('button').hasClass('btn-requested')) {
-    html_ = '<button type="button" onclick="Wo_RegisterFollow(' + id + ', ' + is_confirm_f + ')" class="btn btn-default btn-sm"><i class="fa fa-plus-square progress-icon" data-icon="plus-square"></i><span class="button-text"> <?php echo $wo["lang"]["follow"];?></span></button>';
-  }
-  <?php } else { ?>
-  html_ = '<button type="button" onclick="Wo_RegisterFollow(' + id + ')" class="btn-requested btn btn-default btn-sm"><i class="fa fa-clock-o progress-icon" data-icon="clock-o"></i><span class="button-text"> <?php echo $wo["lang"]["requested"];?></span></button>';
-  if (_follow_con.find('button').hasClass('btn-requested') || _follow_con.find('button').hasClass('btn-active')) {
-    html_ = '<button type="button" onclick="Wo_RegisterFollow(' + id + ')" class="btn btn-default btn-sm"><i class="fa fa-plus-square progress-icon" data-icon="plus-square"></i><span class="button-text"> <?php echo $wo["lang"]["add_friend"];?></span></button>';
-  }
-  <?php } ?>
+
+  <?php if ($wo['config']['connectivitySystem'] == 0): ?>
+    html_ = '<button type="button" onclick="Wo_RegisterFollow(' + id + ', ' + is_confirm_f + ')" class="btn-active btn btn-default btn-sm"><i class="fa fa-check progress-icon" data-icon="check"></i><span class="button-text"> <?php echo $wo["lang"]["following_btn"];?></span></button>';
+    if (is_confirm_f == 1) {
+      html_ = '<button type="button" onclick="Wo_RegisterFollow(' + id + ', ' + is_confirm_f + ')" class="btn-requested btn btn-default btn-sm"><i class="fa fa-clock-o progress-icon" data-icon="clock-o"></i><span class="button-text"> <?php echo $wo["lang"]["requested"];?></span></button>';
+    }
+    if (_follow_con.find('button').hasClass('btn-active') || _follow_con.find('button').hasClass('btn-requested')) {
+      html_ = '<button type="button" onclick="Wo_RegisterFollow(' + id + ', ' + is_confirm_f + ')" class="btn btn-default btn-sm"><i class="fa fa-plus-square progress-icon" data-icon="plus-square"></i><span class="button-text"> <?php echo $wo["lang"]["follow"];?></span></button>';
+    }
+  <?php else: ?>
+    html_ = '<button type="button" onclick="Wo_RegisterFollow(' + id + ')" class="btn-requested btn btn-default btn-sm"><i class="fa fa-clock-o progress-icon" data-icon="clock-o"></i><span class="button-text"> <?php echo $wo["lang"]["requested"];?></span></button>';
+    if (_follow_con.find('button').hasClass('btn-requested') || _follow_con.find('button').hasClass('btn-active')) {
+      html_ = '<button type="button" onclick="Wo_RegisterFollow(' + id + ')" class="btn btn-default btn-sm"><i class="fa fa-plus-square progress-icon" data-icon="plus-square"></i><span class="button-text"> <?php echo $wo["lang"]["add_friend"];?></span></button>';
+    }
+
+  <?php endif; ?>
+
   _follow_con.html(html_);
+
   $.get(Wo_Ajax_Requests_File(), {f: 'follow_user', following_id: id}, function(data) {
     if (data.can_send == 1) {
       Wo_SendMessages();
     }
+
+    else if(data.status == 400){
+      html_ = '<button type="button" onclick="Wo_RegisterFollow(' + id + ')" class="btn btn-default btn-sm"><i class="fa fa-plus-square progress-icon" data-icon="plus-square"></i><span class="button-text"> <?php echo $wo["lang"]["add_friend"];?></span></button>';
+      _follow_con.html(html_);
+
+      $("#modal-alert").modal('show');
+
+      Wo_Delay(function(){
+        $("#modal-alert").modal('hide');
+      },3000);
+    }
   });
+
 }
+
 function Wo_RegisterGroupJoin(id, is_confirm) {
   var _join_con = $('[id=join-' + id + ']');
   is_confirm_ = 0;

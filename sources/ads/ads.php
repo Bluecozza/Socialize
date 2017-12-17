@@ -11,6 +11,7 @@ if ($wo['user']['wallet'] == 0 || $wo['user']['wallet'] == '0.00') {
 $wo['description'] = $wo['config']['siteDesc'];
 $wo['keywords']    = $wo['config']['siteKeywords'];
 $wo['page']        = 'ads';
+$wo['ap']          = 'ads';
 $wo['title']       = 'Manage ads';
 $wo['ads']         = Wo_GetMyAds();
 $wo['content']     = Wo_LoadPage('ads/content');

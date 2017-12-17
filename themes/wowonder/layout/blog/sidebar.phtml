@@ -1,5 +1,9 @@
-<div class="blog-sidebar">
-	<h4 class="title main"><i class="fa fa-fw fa-file-text"></i> <?php echo $wo['lang']['read_more'] ?></h4>
+<div class="blog-sidebar wo-content-shadow">
+	<div>
+		<h4 class="title">
+			<i class="fa fa-newspaper-o"></i> &nbsp; <?php echo $wo['lang']['read_more'] ?>
+		</h4>
+	</div>
 	<?php 
 	$blogs = Wo_GetBlogs(array('limit' => 5, 'order_by' => 'RAND', 'id' => $wo['article']['id']));
 	foreach ($blogs as $key => $wo['blog-style']) {

@@ -1,7 +1,5 @@
 <?php echo Wo_LoadPage('ads/includes/header'); ?>
-
-
-<div class="w100 create-ads-cont">
+<div class="create-ads-cont">
 	<form class="form" method="get" id="update-ads">
 	<div class="col-md-7 col-lg-7 col-sm-7 col-xs-12 create-ads-inner-left">
 		<div id="update-ads-alert" class="w100">
@@ -76,187 +74,109 @@
           	<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=<?php echo $wo['ad-data']['location']; ?>&language=en"></iframe>
           </div>
        </div>
-       	<div class="form-group w100">
-			
+       	<div class="form-group">
 			<label class="col-md-3"><?php echo $wo['lang']['audience']; ?></label>
 			<div class="col-md-9">
-				<div class="form-control ads-audience" >
+				<select name="audience-list[]" class="form-control selectpicker" data-size="7" multiple data-live-search="true" data-actions-box="true">
 					<?php foreach ($wo['audience'] as $key => $value): ?>
-						<p>
-							<input 
-							type="checkbox" 
-							class="ads-audience-list" 
-							name="audience-list[]" 
-							value="<?php echo $key; ?>"
-							<?php if ($key == 0) {
-								echo "id='select-all-countries'";
-							} ?>
-
-							<?php if (in_array($key, $wo['ad-data']['country_ids']) && $key != 0){ echo "checked='true'";}
-							?>
-							style="vertical-align: middle;"
-							>
-								
-							<label style="vertical-align: middle;"><?php echo $value; ?></label>
-						</p> 
+						<option value="<?php echo $key; ?>" <?php if (in_array($key, $wo['ad-data']['country_ids']) && $key != 0){ echo 'selected';}?>>
+							<?php echo $value; ?>
+						</option>
 					<?php endforeach;?>
-				</div>
+				</select>
 			</div>
+			<div class="clear"></div>
+		</div>	
+	</div>
+	<div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 create-ads-inner-right">
+		<div class="form-group">
+			<div class="col-md-12">
+				<select name="gender" class="form-control">
+					<option value="all" <?php if ($wo['ad-data']['gender'] == 'all') {echo "checked";}?> >
+						<?php echo $wo['lang']['gender']; ?> <?php echo $wo['lang']['all']; ?>
+					</option>
+					<option value="male" <?php if ($wo['ad-data']['gender'] == 'male') {echo "checked";}?>>
+						<?php echo $wo['lang']['male']; ?>
+					</option>
+					<option value="famale" <?php if ($wo['ad-data']['gender'] == 'famale') {echo "checked";}?>>
+						<?php echo $wo['lang']['female']; ?>
+					</option>
+				</select>
+			</div>
+			<div class="clear"></div>
 		</div>
-		<div class="form-group w100">
-			<label class="col-md-3"></label>
-			<div class="col-md-9">
-				<button class="btn btn-main pull-right" type="submit">
-					<i class="fa fa-plus-square progress-icon" ></i>
-					<?php echo $wo['lang']['add']; ?>
+		<div class="form-group">
+			<div class="col-md-12">
+				<label>
+					<?php echo $wo['lang']['bidding']; ?>
+				</label>
+				<select name="bidding" id="bidding" class="form-control">
+					<option value="clicks" <?php echo ($wo['ad-data']['bidding'] == 'clicks') ? 'selected' : ''; ?>>
+						<?php echo str_replace('{{PRICE}}', $wo['config']['ad_c_price'], $wo['lang']['pay_per_click']); ?>
+					</option>
+
+					<option value="views" <?php echo ($wo['ad-data']['bidding'] == 'views') ? 'selected' : ''; ?>>
+						<?php echo str_replace('{{PRICE}}', $wo['config']['ad_v_price'], $wo['lang']['pay_per_imprssion']); ?>
+					</option>
+				</select>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="button-group">
+			<div class="col-md-12">
+				<button class="btn btn-main" type="submit">
+					<i class="fa fa-floppy-o progress-icon" data-icon="floppy-o"></i>
+					<?php echo $wo['lang']['save']; ?>
 				</button>
-				<button class="btn btn-default pull-right cancel" type="reset">
+				&nbsp;
+				<button class="btn btn-default cancel" type="reset">
 					<i class="fa fa-ban progress-icon"></i>
 					<?php echo $wo['lang']['cancel']; ?>
 				</button>
 			</div>
-		</div>	
-	</div>
-	<div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 create-ads-inner-right">
-		<div class="form-group w100">
-			<div class="col-md-12" id="select-ads-img" title="Select image">
-				<img src="<?php echo $wo['ad-data']['image']; ?>" alt="Picture">
-			</div>
-		</div>
-		<hr>
-		<div class="form-group w100">
-			<div class="col-md-12">
-				<p><?php echo $wo['lang']['gender']; ?></p>
-				<div>
-					<input
-					type="radio"
-					name="gender" 
-					value="all" 
-					<?php if ($wo['ad-data']['gender'] == 'all') {
-							echo "checked";
-						}
-					?>
-					>
-					<span><?php echo $wo['lang']['all']; ?></span>
-				</div>
-				<div>
-					<input
-					type="radio"
-					name="gender"
-					value="male"
-					<?php if ($wo['ad-data']['gender'] == 'male') {
-							echo "checked";
-						}
-					?>
-					>
-					<span><?php echo $wo['lang']['male']; ?></span>
-				</div>
-				<div>
-					<input
-					type="radio" 
-					name="gender" 
-					value="famale"
-					<?php if ($wo['ad-data']['gender'] == 'famale') {
-							echo "checked";
-						}
-					?>
-					>
-					<span><?php echo $wo['lang']['female']; ?></span>
-				</div>
-				<hr>
-				<div>
-					<input
-					type="radio" 
-					name="appears" 
-					value="post"
-					<?php if ($wo['ad-data']['appears'] == 'post') {
-							echo "checked";
-						}
-					?>
-					>
-					<span><?php echo $wo['lang']['post']; ?></span>
-				</div>
-				<div>
-					<input
-					type="radio" 
-					name="appears" 
-					value="sidebar"
-					<?php if ($wo['ad-data']['appears'] == 'sidebar') {
-							echo "checked";
-						}
-					?>
-					>
-					<span><?php echo $wo['lang']['sidebar']; ?></span>
-					
-				</div>
-			</div>
-			
-			<div class="col-md-12">
-			<hr>
-				<p><?php echo $wo['lang']['bidding']; ?></p>
-				<select name="bidding" id="bidding" class="form-control">
-					<option value="clicks" <?php echo ($wo['ad-data']['bidding'] == 'clicks') ? 'selected' : ''; ?>><?php echo str_replace('{{PRICE}}', $wo['config']['ad_c_price'], $wo['lang']['pay_per_click']); ?></option>
-					<option value="views" <?php echo ($wo['ad-data']['bidding'] == 'views') ? 'selected' : ''; ?>><?php echo str_replace('{{PRICE}}', $wo['config']['ad_v_price'], $wo['lang']['pay_per_imprssion']); ?></option>
-				</select>
-			</div>
 		</div>
 	</div>
-	<input type="file" name="image" class="hidden" id="ads-image">
 	</form>
+	<div class="clear"></div>
 </div>
 
-<script>
-	
+
+<script>	
 	jQuery(document).ready(function($) {
-	  $("#ads-location").change(function(event) {
-        if ($(this).val().length >= 3) {
-          Wo_Delay(function(){$("#review-ads-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=' + $("#ads-location").val() + '&language=en"></iframe>')},1000)
-        }
-        else{
-          Wo_Delay(function(){$("#review-ads-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=us&language=en"></iframe>')},1000)
-        }
-      });
 
-      $("#update-ads #select-all-countries").change(function(event) {
-      	var self = $(this);
-      	if (self.is(':checked')) {
-      		$("input.ads-audience-list").each(function(index, el) {
-      			$(el).prop('checked', true);
-      		});
-      	}
-      	else{
-      		$("input.ads-audience-list").each(function(index, el) {
-      			$(el).prop('checked', false);
-      		});
-      	}
-	          	
-      });
+	    $('.selectpicker').selectpicker();
 
-      $("#select-ads-img").click(function(event) {
-      	$("#ads-image").click();
-      });
+	    $("#ads-location").change(function(event) {
+	        if ($(this).val().length >= 3) {
+	          Wo_Delay(function(){$("#review-ads-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=' + $("#ads-location").val() + '&language=en"></iframe>')},1000)
+	        }
+
+	        else{
+	          Wo_Delay(function(){$("#review-ads-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=us&language=en"></iframe>')},1000)
+	        }
+      	});
 
 
-      $("#ads-image").change(function(event) {
-      	$("#select-ads-img").html('<img src="' + window.URL.createObjectURL(this.files[0]) + '">');
-      });
+      	$('#update-ads').ajaxForm({
+	       	url: Wo_Ajax_Requests_File() + '?f=ads&s=update&ad-id=<?php echo $_GET['id']; ?>&a=0',
+	       	type:"POST",
+	       	beforeSend: function() {
+	        	Wo_progressIconLoader($('#update-ads').find('button.btn-main'));
+	       	},
+	       	success: function(data) {
+	        	scrollToTop();
+	        	if (data['status'] == 200) {
+	          		$("#update-ads-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+	          		window.location = data.url;
+	        	} 
 
-      $('#update-ads').ajaxForm({
-       url: Wo_Ajax_Requests_File() + '?f=ads&s=update&ad-id=<?php echo $_GET['id']; ?>&a=0',
-       type:"POST",
-       beforeSend: function() {
-        Wo_progressIconLoader($('#update-ads').find('button.btn-main'));
-       },
-       success: function(data) {
-        scrollToTop();
-        if (data['status'] == 200) {
-          $("#update-ads-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
-          window.location = data.url;
-        } else if (data['message']) {
-          $("#update-ads-alert").html('<div class="alert alert-danger">' + data['message'] + '</div>');
-        } 
-        Wo_progressIconLoader($('#update-ads').find('button.btn-main'));
-      }});
+	        	else if (data['message']) {
+	          		$("#update-ads-alert").html('<div class="alert alert-danger">' + data['message'] + '</div>');
+	        	} 
+
+	       		Wo_progressIconLoader($('#update-ads').find('button.btn-main'));
+      		}
+  		});
 
 	});
 </script>

@@ -65,9 +65,10 @@ $pages = array(
     'manage-updates',
     'changelog',
     'online-users',
-    'custom-code'
+    'custom-code',
+    'manage-third-psites',
 );
-$mod_pages = array('dashboard', 'manage-users', 'online-users', 'manage-stories', 'manage-pages', 'manage-groups', 'manage-posts', 'manage-articles', 'manage-events', 'manage-forum-threads', 'manage-forum-messages', 'manage-movies', 'manage-games', 'add-new-game', 'manage-user-ads', 'manage-reports');
+$mod_pages = array('dashboard', 'manage-users', 'online-users', 'manage-stories', 'manage-pages', 'manage-groups', 'manage-posts', 'manage-articles', 'manage-events', 'manage-forum-threads', 'manage-forum-messages', 'manage-movies', 'manage-games', 'add-new-game', 'manage-user-ads', 'manage-reports', 'manage-third-psites');
 
 
 if (!empty($_GET['page'])) {
@@ -507,7 +508,7 @@ if (empty($page_loaded)) {
                         </ul>
                     </li>
                     <?php if ($is_admin == true) { ?>
-                    <li <?php echo ($page == 'verfiy-applications' || $page == 'push-notifications-system' || $page == 'manage-api-access-keys') ? 'class="active"' : ''; ?>>
+                    <li <?php echo ($page == 'verfiy-applications' || $page == 'push-notifications-system' || $page == 'manage-api-access-keys' || $page == 'manage-third-psites') ? 'class="active"' : ''; ?>>
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">compare_arrows</i>
                             <span>Mobile & API Settings</span>
@@ -521,6 +522,9 @@ if (empty($page_loaded)) {
                             </li>
                             <li <?php echo ($page == 'verfiy-applications') ? 'class="active"' : ''; ?>>
                                 <a href="<?php echo Wo_LoadAdminLinkSettings('verfiy-applications'); ?>">Verify Applications</a>
+                            </li>
+                            <li <?php echo ($page == 'manage-third-psites') ? 'class="active"' : ''; ?>>
+                                <a href="<?php echo Wo_LoadAdminLinkSettings('manage-third-psites'); ?>">Third party Websites</a>
                             </li>
                         </ul>
                     </li>

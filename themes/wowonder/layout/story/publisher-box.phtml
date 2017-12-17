@@ -1,5 +1,4 @@
 <?php
-
 $hashtag = '';
 $url = '';
 if (isset($_GET['link1']) && $_GET['link1'] == 'hashtag' && !empty($_GET['hash'])) {
@@ -22,10 +21,38 @@ if (!empty($_GET['url'])) {
       <?php if ($wo['config']['video_upload'] == 1) { ?>
       <div class="publisher-hidden-option" id="video-form">
          <div class="inner-addon <?php echo Wo_RightToLeft('left-addon');?>">
-            <i class="glyphicon fa fa-video-camera"></i>
-            <input name="videocount" type="text" class="form-control" readonly>
+            <span class="pull-left">
+              <i class="glyphicon fa fa-video-camera"></i>
+              <input name="videocount" type="text" class="form-control" readonly>
+            </span>
+            
+            <span class="pull-right pointer video-custom-thumb">
+              <?php echo $wo['lang']['custom_thumbnail']; ?>&nbsp;<i class="fa fa-caret-down"></i>
+            </span>
          </div>
+         <div class="video-poster-image">
+           <div class="thumb-renderer pointer" onclick="$('#custom-video-thumb').trigger('click');">
+             <div id="post_vthumb_droparea">
+                <div class="preview">
+                  <h3><?php echo $wo['lang']['drop_img_here']; ?></h3>
+                  <div class="error-text-renderer">
+                    
+                  </div>
+                  <div>
+                    <span><?php echo $wo['lang']['or']; ?></span>
+                    <p>
+                      <?php echo $wo['lang']['browse_to_upload']; ?>
+                    </p>
+                  </div>
+                </div>
+                <div class="image">
+                </div>
+             </div>
+           </div>
+         </div>
+         <input type="file" class="hidden" name="video_thumb" id="custom-video-thumb" accept="image/*">
       </div>
+
       <?php } ?>
       <?php if ($wo['config']['audio_upload'] == 1) { ?>
       <div class="publisher-hidden-option" id="music-form">
@@ -341,7 +368,7 @@ $(function () {
 
   $("#publisher-video").change(function () {
     var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
-    $("#video-form input").val(filename);
+    $("#video-form input[type='text']").val(filename);
     $("#video-form").slideDown(200);
   });
 
@@ -355,9 +382,12 @@ $(function () {
     var self = $(this);
     self.toggleClass('unsetheight');
   });
+
   $(document).on('click', '.rads-clicks', function(event) {
     var self  = $(this);
     var ad_id = self.attr('id');
+    var url   = self.find('a').attr('href');
+    window.open(url, '_blank');
     if (ad_id) {
       $.ajax({
         url: Wo_Ajax_Requests_File() ,
@@ -365,20 +395,35 @@ $(function () {
         dataType: 'json',
         data: {f: 'ads',s:'rads-c',ad_id:ad_id},
       })
-      .done(function(data) {
-        if (data.status == 200) {
-          window.location.href = self.find('a').attr('href');
-        }
-      })
-      .fail(function() {
-        console.log("Something went wrong. Try again later");
-      })
+      .done(function(data) {/*pass*/})
+      .fail(function() {/*pass*/});
     }
     event.preventDefault();
   });
-  $(document).on('click', '.rads-views', function(event) {
+
+  $(document).on('click', '.rvad-clicks', function(event) {
     var self  = $(this);
-    var ad_id = self.attr('id');
+    self.off("click").removeClass('rvad-clicks');
+    var ad_id = self.parent().attr('id');
+    var url   = self.find('a').attr('href');
+    if (ad_id) {
+      $.ajax({
+        url: Wo_Ajax_Requests_File() ,
+        type: 'GET',
+        dataType: 'json',
+        data: {f: 'ads',s:'rads-c',ad_id:ad_id},
+      })
+      .done(function(data) {/*pass*/})
+      .fail(function() {/*pass*/});
+    }
+    event.preventDefault();
+  });
+
+  $(document).on('click', '.rvad-views', function(event) {
+    var self  = $(this);
+    self.off("click").removeClass('rvad-views');
+    var ad_id = self.parent().attr('id');
+    var url   = self.find('a').attr('href');
     if (ad_id) {
       $.ajax({
         url: Wo_Ajax_Requests_File() ,
@@ -386,14 +431,77 @@ $(function () {
         dataType: 'json',
         data: {f: 'ads',s:'rads-v',ad_id:ad_id},
       })
-      .done(function(data) {
-        if (data.status == 200) {
-           window.location.href = self.find('a').attr('href');
-        }
+      .done(function(data) {/*pass*/})
+      .fail(function() {/*pass*/});
+    }
+    event.preventDefault();
+  });
+
+
+
+        
+  var thumb_drop_block = $(".thumb-renderer");
+
+  if (typeof(window.FileReader) == 'undefined') {
+    thumb_drop_block.find('.preview').text('Drag drop is not supported in your browser!');
+  }
+
+  else{
+    thumb_drop_block[0].ondragover = function() {
+        thumb_drop_block.addClass('hover');
+        return false;
+    };
+        
+    thumb_drop_block[0].ondragleave = function() {
+        thumb_drop_block.removeClass('hover');
+        return false;
+    };
+
+    thumb_drop_block[0].ondrop = function(event) {
+        event.preventDefault();
+        thumb_drop_block.removeClass('hover');
+        var file = event.dataTransfer.files;
+        $("#custom-video-thumb").prop('files', file);
+    };
+  }
+
+  $("#custom-video-thumb").change(function(event) {
+    $("#post_vthumb_droparea").find('.preview').hide(5, function() {
+      $("#post_vthumb_droparea").find('.image').html($("<img>",{
+        src:window.URL.createObjectURL(event.target.files[0])
+      })).show(5);
+    });;
+  });
+
+  $(".video-custom-thumb").click(function(event) {
+    $(this).find('i').toggleClass('rotate-90d');
+
+    $('.video-poster-image').slideToggle(50,function () {
+      let display_stat = $(this).css('display');
+
+      if (display_stat == 'none') {
+        $(".video-poster-image").find('.preview').show(10);
+        $(".video-poster-image").find('.image').empty().hide(10);
+        $("#custom-video-thumb").val('');
+      }
+
+    });
+  });
+
+  $(document).on('click', '.rads-views', function(event) {
+    var self  = $(this);
+    var ad_id = self.attr('id');
+    var url   = self.find('a').attr('href');
+    window.open(url, '_blank');
+    if (ad_id) {
+      $.ajax({
+        url: Wo_Ajax_Requests_File() ,
+        type: 'GET',
+        dataType: 'json',
+        data: {f: 'ads',s:'rads-v',ad_id:ad_id},
       })
-      .fail(function() {
-        console.log("Something went wrong. Try again later");
-      })
+      .done(/* pass */)
+      .fail(/* pass */)
     }
     event.preventDefault();
   });
@@ -436,6 +544,12 @@ $(function () {
         }
         $('#posts, #posts_hashtag').prepend(data.html);
         $('#video-form, #emo-form, #music-form, #map-form, #file-form, #photo-form, #album-form, .feeling-type, #poll-form').slideUp(200);
+        $(".video-poster-image").hide(10, function() {
+          $(this).find('.preview').show(10);
+          $(this).find('.image').empty().hide(10);
+          $(".video-custom-thumb").find('i').removeClass('rotate-90d');
+        });
+
         Wo_RemoveFetchedUrl();
         $('form.post').clearForm();
         $('.feelings-value').html('');
@@ -514,46 +628,55 @@ $(function () {
   $(function () {
      var autocomplete = new google.maps.places.Autocomplete(pac_input);
   });
+
   var getUrl  = $('.form-control.postText'); //url to extract from text field
 
-  $('.form-control.postText').on("paste keyup", function(e) { //user types url in text field    
+  $('.form-control.postText').on("paste keyup", function(e) {    
     
-    var match_url = /(https?:\/\/[^\s]+)/g;
-   
-     if (($(".extracted_url").length > 0)){
-       return false;
-     }
-    setTimeout(function () { 
-   
-    if (match_url.test(getUrl.val())) {
-        
-        $("#results").hide();
-        $("#loading_indicator").show();
-        
-        var extracted_url = getUrl.val().match(match_url)[0];
-        $.post(Wo_Ajax_Requests_File() + '?f=posts&s=fetch_url',{'url': extracted_url}, function(data){         
-          extracted_images = data.images;
-          total_images = parseInt(data.images.length-1);
-          img_arr_pos = total_images;
-          if(extracted_images != ''){
-            inc_image = '<div class="extracted_thumb" id="extracted_thumb"><img src="'+data.images[img_arr_pos]+'"></div>';
-            input_image = data.images[img_arr_pos];
-          } else {
-            inc_image = '';
-            input_image = '';
-          }
-          
-          var img_content = '';
-          if (total_images > 1) {
-            img_content = '<div class="thumb_select"><div class="thumb_sel"><span class="prev_thumb" id="thumb_next"><i class="fa fa-arrow-circle-right"></i></span><span class="next_thumb" id="thumb_prev"><i class="fa fa-arrow-circle-left"></i></span> </div><span class="small_text" id="total_imgs">'+img_arr_pos+' of '+total_images+'</span></div></div></div>';
-          }
-          var content = '<div class="extracted_url"><span class="remove-fetched-url" onclick="Wo_RemoveFetchedUrl();"><i class="fa fa-remove"></i></span>'+ inc_image +'<div class="extracted_content"><input class="form-control url-input" type="text" name="url_title" value="'+data.title+'" dir="auto"><br><textarea onkeyup="textAreaAdjust(this, 70)" class="form-control url-input-textarea url-input" name="url_content" placeholder="Description" dir="auto">' + data.content + '</textarea><input type="hidden" id="url_image" name="url_image" value="'+ input_image +'"><input type="hidden" id="url_link" name="url_link" value="'+data.url+'"><div class="clear"></div>' + img_content;
-          $("#results").html(content); 
-          $("#results").fadeIn(); 
-          $("#loading_indicator").hide();
-                },'json');
+    if (($(".extracted_url").length > 0)){
+      return false;
     }
-    }, 100);
+
+    else if (/(https?:\/\/(?:.*)\.(?:png|jpg|gif|jpeg))/ig.test(getUrl.val())) {
+      /* pass */
+    }
+
+    else{
+      var match_url = /(https?:\/\/[^\s]+)/g;
+      if (match_url.test(getUrl.val())) {
+          $("#results").hide();
+          $("#loading_indicator").show(); 
+          var extracted_url = getUrl.val().match(match_url)[0];
+
+          $.post(Wo_Ajax_Requests_File() + '?f=posts&s=fetch_url',{'url': extracted_url}, function(data){         
+            extracted_images = data.images;
+            total_images     = parseInt(data.images.length-1);
+            img_arr_pos      = total_images;
+
+            if(extracted_images != ''){
+              inc_image   = '<div class="extracted_thumb" id="extracted_thumb"><img src="'+data.images[img_arr_pos]+'"></div>';
+              input_image = data.images[img_arr_pos];
+            } 
+
+            else {
+              inc_image   = '';
+              input_image = '';
+            }
+            
+            var img_content = '';
+            if (total_images > 1) {
+              img_content = '<div class="thumb_select"><div class="thumb_sel"><span class="prev_thumb" id="thumb_next"><i class="fa fa-arrow-circle-right"></i></span><span class="next_thumb" id="thumb_prev"><i class="fa fa-arrow-circle-left"></i></span> </div><span class="small_text" id="total_imgs">'+img_arr_pos+' of '+total_images+'</span></div></div></div>';
+            }
+
+            var content = '<div class="extracted_url"><span class="remove-fetched-url" onclick="Wo_RemoveFetchedUrl();"><i class="fa fa-remove"></i></span>'+ inc_image +'<div class="extracted_content"><input class="form-control url-input" type="text" name="url_title" value="'+data.title+'" dir="auto"><br><textarea onkeyup="textAreaAdjust(this, 70)" class="form-control url-input-textarea url-input" name="url_content" placeholder="Description" dir="auto">' + data.content + '</textarea><input type="hidden" id="url_image" name="url_image" value="'+ input_image +'"><input type="hidden" id="url_link" name="url_link" value="'+data.url+'"><div class="clear"></div>' + img_content;
+
+            $("#results").html(content); 
+            $("#results").fadeIn(); 
+            $("#loading_indicator").hide();
+
+          },'json');
+      }
+    }
   });
 
 

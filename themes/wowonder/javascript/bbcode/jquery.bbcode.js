@@ -265,7 +265,7 @@ sub:function(a,b){return'<iframe class="youtube-player" type="text/html" width="
                     <li class="bbcode-center" title="Center"><i class="fa fa-align-center" aria-hidden="true"></i></li>\
                     <li class="bbcode-image" title="Image"><i class="fa fa-picture-o" aria-hidden="true"></i></li>\
                     <li class="bbcode-link" title="Link"><i class="fa fa-link" aria-hidden="true"></i></li>\
-                    <li class="bbcode-spoiler disabled" title="Spoiler"><i class="fa fa-bars" aria-hidden="true"></i></li>\
+                    <li class="bbcode-iframe" title="iFrame"><i class="fa fa-video-camera" aria-hidden="true"></i></li>\
                     <li class="bbcode-quote" title="Quote"><i class="fa fa-quote-right" aria-hidden="true"></i></li>\
                     <li class="bbcode-justify" title="Justify"><i class="fa fa-align-justify" aria-hidden="true"></i></li>\
                     <li class="bbcode-align-left" title="Align-left"><i class="fa fa-align-left" aria-hidden="true"></i></li>\
@@ -322,7 +322,7 @@ sub:function(a,b){return'<iframe class="youtube-player" type="text/html" width="
                     var img_url = prompt('Enter a valid url to an image', 'http://i.imgur.com/sJIRJ.gif');
                     if (!img_url) { return; }
 
-                    $cloned_textarea.replaceSelectedText('[img]' + img_url + '[/img]', 0, true);
+                    $cloned_textarea.replaceSelectedText('[img]' + img_url + '[/img]', '', true);
                     $cloned_textarea.focus()                    
                 });  
                 
@@ -330,14 +330,55 @@ sub:function(a,b){return'<iframe class="youtube-player" type="text/html" width="
                     var url = prompt('Enter a valid url', 'http://www.google.com/');
                     if (!url) { return; }
 
-                    $cloned_textarea.replaceSelectedText('[url]' + url + '[/url]', 0, true);
+                    $cloned_textarea.replaceSelectedText('[url]' + url + '[/url]', '', true);
                     $cloned_textarea.focus()                    
                 });
                 
-                $editor.find('.bbcode-spoiler').bind('click', function () {
-                    return false;
-                    $cloned_textarea.surroundSelectedText('[spoiler]', '[/spoiler]', true);
-                    $cloned_textarea.focus()
+                $editor.find('.bbcode-iframe').bind('click', function () {
+                    let url = prompt("iFrame: ");
+                    var pattern1 = new RegExp('^(https?:\\/\\/)?'+ 
+                    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ 
+                    '((\\d{1,3}\\.){3}\\d{1,3}))'+ 
+                    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ 
+                    '(\\?[;&a-z\\d%_.~+=-]*)?'+ 
+                    '(\\#[-a-z\\d_]*)?$','i');
+
+                    var pattern2 = /(?:http?s?:\/\/)?(?:www\.)?(?:vimeo\.com)\/?(\d+)/g;
+                    var pattern3 = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?([\w\-]{10,12})(?:&feature=related)?(?:[\w\-]{0})?/g;
+                    var pattern4 = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/embed\/([\w\-]{10,12})/g;
+                    var pattern5 = /(?:http?s?:\/\/)?(?:www\.)?(?:vimeo\.com)\/video\/(\d+)/g;
+
+                    if (!url) {
+                        return false;
+                    }
+
+                    else if (pattern1.test(url) !== true) {
+                        alert("Video URL is invalid, please check your details");
+                        return false;
+                    }
+
+                    else if(pattern2.test(url)){
+                       var replacement = '[IFRAME]https://player.vimeo.com/video/$1[/IFRAME]';   
+                       url = url.replace(pattern2, replacement);
+                    }
+           
+        
+                    else if(pattern3.test(url)){
+                        var replacement = '[IFRAME]https://www.youtube.com/embed/$1[/IFRAME]';
+                        url = url.replace(pattern3, replacement);
+                    }
+
+                    else if(pattern4.test(url) || pattern5.test(url)){
+                        url = '[IFRAME]'+url+'[/IFRAME]';
+                    }
+
+                    else{
+                        alert("Video URL not supported");
+                        return false;
+                    }
+
+                    $cloned_textarea.surroundSelectedText(url, '',true);
+                    $cloned_textarea.focus();
                 });
 
                 $editor.find('.bbcode-quote').bind('click', function () {
@@ -349,26 +390,32 @@ sub:function(a,b){return'<iframe class="youtube-player" type="text/html" width="
                     $cloned_textarea.surroundSelectedText('[justify]', '[/justify]', true);
                     $cloned_textarea.focus()
                 }); 
+
                 $editor.find('.bbcode-align-left').bind('click', function () {
                     $cloned_textarea.surroundSelectedText('[left]', '[/left]', true);
                     $cloned_textarea.focus()
                 });
+
                 $editor.find('.bbcode-align-right').bind('click', function () {
                     $cloned_textarea.surroundSelectedText('[right]', '[/right]', true);
                     $cloned_textarea.focus()
                 });
+
                 $editor.find('.bbcode-list-ol').bind('click', function () {
                     $cloned_textarea.surroundSelectedText('[ordered_list]\n[*] ... ', '[/*]\n[/ordered_list]', true);
                     $cloned_textarea.focus()
                 });
+
                 $editor.find('.bbcode-list-ul').bind('click', function () {
                     $cloned_textarea.surroundSelectedText('[unordered_list]\n[*] ... ', '[/*]\n[/unordered_list]', true);
                     $cloned_textarea.focus()
                 });
+
                 $editor.find('.bbcode-code').bind('click', function () {
                     $cloned_textarea.surroundSelectedText('[code] \n\n', '[/code]', true);
                     $cloned_textarea.focus()
                 });
+
                 $editor.find('.bbcode-pre').bind('click', function () {
                     $cloned_textarea.surroundSelectedText('[pre] \n\n', '[/pre]', true);
                     $cloned_textarea.focus()
@@ -379,3 +426,4 @@ sub:function(a,b){return'<iframe class="youtube-player" type="text/html" width="
         });
     };
 }(jQuery));
+
