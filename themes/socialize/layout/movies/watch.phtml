@@ -20,7 +20,7 @@
 			</div>	
 
       <?php elseif(!empty($wo['movie']['iframe'])): ?>
-        <iframe src="<?php echo $wo['movie']['iframe']; ?>" frameborder="0"></iframe>
+        <iframe src="<?php echo $wo['movie']['iframe']; ?>" frameborder="0" height="100%" allowfullscreen ></iframe>
       <?php else: ?>
         <div class="video-js-responsive-container vjs-hd">
         <video style="width: 100%; height: 100%;" class="video-js vjs-big-play-centered" controls preload="auto">
@@ -138,10 +138,15 @@
                       </span> 
                     </h4>
 		              </div>
+<?php
+                    if ($wo['loggedin'] == false){
+                    echo ' <div class="clear"></div>';
+                    }else{
+                    ?>
 		              <div class="movies-com-box">
 		                <form  class="form">
 		                  <div class="w100">
-		                    <textarea  id="movies-comment" name="text" class="form-control" placeholder="Wrire a comment"></textarea>
+		                    <textarea  id="movies-comment" name="text" class="form-control" placeholder="Write a comment"></textarea>
 		                    <div class="movies-com-box-act">
 		                      <button id="add-movie-comment" class="btn pull-right bg-main" type="button">
 		                        <?php echo $wo['lang']['post']; ?>
@@ -154,8 +159,10 @@
 		                  <div class="clear"></div>
 		                </form>
 		                <div class="clear"></div>
-
 		              </div>
+                    <?php
+                    }
+                    ?>
 		              <div class="movies-comlist-container">
 		                <?php 
 		                  foreach (Wo_GetMovieComments(array('movie_id'=> $wo['movie']['id'])) as $wo['comment']) {

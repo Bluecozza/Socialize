@@ -2902,7 +2902,7 @@ function Wo_AddBlogCommentDisLikes($id, $blog) {
 function Wo_GetMovies($args = array()) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false) {
-        return false;
+//        return false;
     }
     $options = array(
         "offset" => 0,
@@ -3058,7 +3058,7 @@ function Wo_GetMovieCommentsCount($id) {
     global $sqlConnect, $wo;
     $is_owner = false;
     if ($wo['loggedin'] == false || !$id || !is_numeric($id) || $id < 1) {
-        return false;
+    //    return false;
     }
     $count        = 0;
     $sql          = "SELECT COUNT(`id`) as blogComments FROM " . T_MOVIE_COMMS . " WHERE `movie_id` = '$id'";
@@ -3136,7 +3136,7 @@ function Wo_IsMovieCommentOwner($id) {
     global $sqlConnect, $wo;
     $is_owner = false;
     if ($wo['loggedin'] == false || !$id || !is_numeric($id) || $id < 1) {
-        return false;
+//        return false;
     }
     $query        = mysqli_query($sqlConnect, "SELECT * FROM  " . T_MOVIE_COMMS . " WHERE `id` = '$id'");
     $fetched_data = mysqli_fetch_assoc($query);
@@ -3151,7 +3151,7 @@ function Wo_IsMovieCommReplyOwner($id) {
     global $sqlConnect, $wo;
     $is_owner = false;
     if ($wo['loggedin'] == false || !$id || !is_numeric($id) || $id < 1) {
-        return false;
+//        return false;
     }
     $query        = mysqli_query($sqlConnect, "SELECT * FROM  " . T_MOVIE_COMM_REPLIES . " WHERE `id` = '$id'");
     $fetched_data = mysqli_fetch_assoc($query);
@@ -3165,7 +3165,7 @@ function Wo_IsMovieCommReplyOwner($id) {
 function Wo_GetMovieCommentData($id) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false || !$id || !is_numeric($id) || $id < 1) {
-        return false;
+//        return false;
     }
     $query        = mysqli_query($sqlConnect, "SELECT * FROM  " . T_MOVIE_COMMS . " WHERE `id` = '$id'");
     $fetched_data = mysqli_fetch_assoc($query);
@@ -3185,7 +3185,7 @@ function Wo_GetMovieCommentData($id) {
 function Wo_GetMovieCommReplyData($id) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false || !$id || !is_numeric($id) || $id < 1) {
-        return false;
+//        return false;
     }
     $query        = mysqli_query($sqlConnect, "SELECT * FROM  " . T_MOVIE_COMM_REPLIES . " WHERE `id` = '$id'");
     $fetched_data = mysqli_fetch_assoc($query);
@@ -3250,7 +3250,7 @@ function Wo_GetMovieCommReplyLikes($id) {
 function Wo_IsMovieCommentLikeExists($id) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false || !$id || !is_numeric($id) || $id < 1) {
-        return false;
+//        return false;
     }
     $id     = Wo_Secure($id);
     $user   = $wo['user']['id'];
@@ -3268,7 +3268,7 @@ function Wo_IsMovieCommentLikeExists($id) {
 function Wo_IsMovieCommentDisLikeExists($id) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false || !$id || !is_numeric($id) || $id < 1) {
-        return false;
+ //       return false;
     }
     $id     = Wo_Secure($id);
     $user   = $wo['user']['id'];
@@ -3286,7 +3286,7 @@ function Wo_IsMovieCommentDisLikeExists($id) {
 function Wo_IsMovieCommentReplyLikeExists($id) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false || !$id || !is_numeric($id) || $id < 1) {
-        return false;
+//        return false;
     }
     $id     = Wo_Secure($id);
     $user   = $wo['user']['id'];
@@ -3304,7 +3304,7 @@ function Wo_IsMovieCommentReplyLikeExists($id) {
 function Wo_IsMovieCommentReplyDisLikeExists($id) {
     global $sqlConnect, $wo;
     if ($wo['loggedin'] == false || !$id || !is_numeric($id) || $id < 1) {
-        return false;
+//        return false;
     }
     $id     = Wo_Secure($id);
     $user   = $wo['user']['id'];
