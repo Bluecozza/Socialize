@@ -1,13 +1,13 @@
 <?php
-$themeName = 'Socialize';
+$themeName = 'Social Materialize';
 
-$themeFolder = 'socialize';
+$themeFolder = 'materialize';
 
-$themeAuthor = 'Bluecozza';
+$themeAuthor = 'Reid';
 
-$themeAuthorUrl = 'mailto:wowondersocial@gmail.com';
+$themeAuthorUrl = 'mailto:info@ratz.us';
 
-$themeVirsion = '1';
+$themeVirsion = '1.5.2';
 
 $themeImg = $themeFolder . '/themeLogo.png';
 ?>

@@ -91,7 +91,7 @@ if ($followers_alert == 0) {
             <img id="updateImage-<?php echo $wo['user']['user_id']?>" src="<?php echo $wo['user']['avatar'];?>" alt="<?php echo $wo['user']['name'];?> Profile Picture">
          </div><span class="caret"></span>
       </a>
-      <ul class="dropdown-menu" role="menu">
+      <ul class="dropdown-menu" role="menu" style="max-height: 400px; overflow: auto;">
          <?php 
          if ($wo['config']['pro'] == 1) {
          if (Wo_IsUserPro() === false) { ?>
@@ -168,6 +168,13 @@ if ($followers_alert == 0) {
             <?php echo $wo['lang']['my_articles']; ?>
             </a>
          </li>
+         <?php if ($wo['config']['movies'] == 1) { ?>
+         <li class="dropdown-search-link">
+            <a href="<?php echo Wo_SeoLink('index.php?link1=movies'); ?>">
+            <?php echo $wo['lang']['movies']; ?>
+            </a>
+         </li>
+         <?php } ?>
          <?php } ?>
          <?php if ($wo['config']['events'] == 1) { ?>
          <li class="dropdown-search-link">

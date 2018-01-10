@@ -2,3 +2,8 @@ This is Customize Version of WOWONDER Script. Original Wowonder sale page can be
 The License system is not changed. You / anyone can freely use this script as long own a valid license from wowonder.
 
 This project mainly create a modular custom function to extend default capability of wowonder
++ Update as soon wowonder release update
++ Opengraph Fix
++ Permission fix
++ Material Theme
+++ more will apply

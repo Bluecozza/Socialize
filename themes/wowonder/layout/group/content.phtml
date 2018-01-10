@@ -1,3 +1,15 @@
+<?php $show_list = false;
+             if ($wo['group_profile']['privacy'] == 1) {
+               $show_list = true;
+             } else if ($wo['group_profile']['privacy'] == 2) {
+                if (!Wo_IsGroupOnwer($wo['group_profile']['id'])) {
+                   if (Wo_IsGroupJoined($wo['group_profile']['id'])) {
+                      $show_list = true;
+                   }
+                } else {
+                  $show_list = true;
+                }
+             }  ?>
 <div class="row page-margin" data-page="group" data-id="<?php echo $wo['group_profile']['id'];?>">
   <div class="profile-container">
      <div class="profile-top-line"></div>
@@ -62,6 +74,9 @@
              <?php
             if (isset($_GET['type'])) {
               if ($_GET['type'] == 'members') {
+                if ($show_list == true) {
+                  # code...
+                
             ?>
         <div class="list-group profile-lists">
          <div class="list-group-item"><i class="fa fa-fw fa-users"></i> <?php echo $wo['lang']['members'];?></div>
@@ -78,7 +93,7 @@
             </div>
             <div class="clear"></div>
         </div>
-    <?php } else if ($_GET['type'] == 'add_members') {
+    <?php } } else if ($_GET['type'] == 'add_members') {
       ?>
         <div class="list-group profile-lists">
          <div class="list-group-item"><i class="fa fa-fw fa-user-plus"></i> <?php echo $wo['lang']['add_your_frineds'];?></div>
@@ -142,13 +157,17 @@
          $group_icon = 'lock';
       }
       ?>
-       <li class="list-group-item" style="background-color: #fff;border-bottom:0;  position: relative; display: block; padding: 5px 10px;font-size: 13px;background-color: #fff;color: #555">
-          <strong><i class="fa fa-users fa-fw"></i></strong> <a href="<?php echo Wo_SeoLink('index.php?link1=timeline&u=' . $wo['group_profile']['group_name'] . '&type=members');?>" data-ajax="?link1=timeline&u=<?php echo $wo['group_profile']['group_name'];?>&type=members"><?php echo Wo_CountGroupMembers($wo['group_profile']['id']);?> <?php echo $wo['lang']['members'];?></a>
+       <?php if ($show_list == true): ?>
+       
+       <li class="list-group-item" style="background-color: #fff;border-bottom:0;  position: relative; display: block; padding: 5px 15px;font-size: 13px;background-color: #fff;color: #555">
+          <strong><i class="fa fa-users fa-fw"></i></strong>
+          <a href="<?php echo Wo_SeoLink('index.php?link1=timeline&u=' . $wo['group_profile']['group_name'] . '&type=members');?>" data-ajax="?link1=timeline&u=<?php echo $wo['group_profile']['group_name'];?>&type=members"><?php echo Wo_CountGroupMembers($wo['group_profile']['id']);?> <?php echo $wo['lang']['members'];?></a>
           <?php if (Wo_IsGroupOnwer($wo['group_profile']['id'])) { ?>
           <span class="green">+<?php echo Wo_CountJoinedThisWeek($wo['group_profile']['id']); ?> <?php echo $wo['lang']['this_week']; ?></span>
           <?php } ?>
       </li>
-       <li class="list-group-item">
+      <?php endif ?>
+       <li class="list-group-item" <?php if ($show_list == false): ?>style="background-color: #fff;border-bottom:0;  position: relative; display: block; padding: 5px 15px;font-size: 13px;background-color: #fff;color: #555"<?php endif ?>>
         <strong><i class="fa fa-<?php echo $group_icon; ?> fa-fw" data-toggle="tooltip" ></i></strong>
         <?php echo $group_privacy; ?>
       </li>

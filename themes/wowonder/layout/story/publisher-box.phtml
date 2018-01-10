@@ -439,7 +439,7 @@ $(function () {
 
 
 
-        
+  <?php if ($wo['config']['video_upload'] == 1) { ?>  
   var thumb_drop_block = $(".thumb-renderer");
 
   if (typeof(window.FileReader) == 'undefined') {
@@ -464,6 +464,7 @@ $(function () {
         $("#custom-video-thumb").prop('files', file);
     };
   }
+  <?php } ?>
 
   $("#custom-video-thumb").change(function(event) {
     $("#post_vthumb_droparea").find('.preview').hide(5, function() {
@@ -631,7 +632,7 @@ $(function () {
 
   var getUrl  = $('.form-control.postText'); //url to extract from text field
 
-  $('.form-control.postText').on("paste keyup", function(e) {    
+  $('.form-control.postText').bind("paste keyup input propertychange", function(e) {    
     
     if (($(".extracted_url").length > 0)){
       return false;

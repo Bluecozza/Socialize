@@ -578,7 +578,7 @@ function Wo_LoadPageReviews(self = false){
 <?php if (!empty($wo['page_profile']['background_image']) && $wo['page_profile']['background_image_status'] == 1) { ?>
 <style>
   body {
-    background: url(<?php echo Wo_GetMedia($wo['page_profile']['background_image']); ?>) fixed;
+    background: url(<?php echo Wo_GetMedia($wo['page_profile']['background_image']); ?>) fixed !important;
     background-size:100% auto;
   }
 </style>
